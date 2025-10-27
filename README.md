@@ -1,6 +1,33 @@
 # NFC Card Emulator (NFC-bumber)
 
-> 🚧 **Development Status**: Currently in active development. Sprint 1 (Foundation & Core Infrastructure) is complete!
+[![Latest Release](https://img.shields.io/github/v/release/disk0Dancer/NFC-bumber?label=Latest%20Release&color=brightgreen)](https://github.com/disk0Dancer/NFC-bumber/releases/latest)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](LICENSE)
+[![Android](https://img.shields.io/badge/Android-8.0%2B-green.svg)](https://developer.android.com)
+
+## 📲 Установка | Installation
+
+### Через Obtainium (Рекомендуется | Recommended) 🚀
+
+[<img src="assets/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/disk0Dancer/NFC-bumber)
+
+**Что такое Obtainium? | What is Obtainium?**
+
+Obtainium - это приложение для автоматического отслеживания и установки обновлений open-source приложений напрямую из GitHub. | Obtainium is an app for automatically tracking and installing updates of open-source apps directly from GitHub.
+
+**Как установить | How to install:**
+1. Установите [Obtainium](https://github.com/ImranR98/Obtainium/releases/latest)
+2. Нажмите на значок выше или добавьте вручную: `https://github.com/disk0Dancer/NFC-bumber`
+3. Obtainium автоматически установит приложение и будет следить за обновлениями
+
+### Прямая установка APK | Direct APK Installation
+
+[**📥 Скачать последнюю версию | Download Latest Version**](https://github.com/disk0Dancer/NFC-bumber/releases/latest)
+
+1. Скачайте `.apk` файл из [Releases](https://github.com/disk0Dancer/NFC-bumber/releases)
+2. Включите "Установка из неизвестных источников" в настройках Android
+3. Установите APK файл
+
+---
 
 ## Обзор | Overview
 
@@ -155,15 +182,23 @@ cd NFC-bumber
 - **Detekt** - Статический анализ
 - **JaCoCo** - Покрытие кода
 
+### DevOps & CI/CD
+- **GitHub Actions** - Автоматическая сборка и тестирование
+- **Dependabot** - Автоматическое обновление зависимостей
+- **Auto-labeling** - Автоматическая маркировка PR
+- **Экономичная конфигурация** - Оптимизировано для бесплатного tier GitHub Actions
+- См. [DevOps Documentation](./.github/README.md) для деталей
+
 ## 🤝 Вклад в проект | Contributing
 
 Мы приветствуем вклад в проект! Перед началом работы:
 
-1. Прочитайте [Coding Style Guide](./docs/guides/coding-style-guide.md)
-2. Ознакомьтесь с [Architecture](./docs/architecture/c4-model.md)
-3. Создайте feature branch
-4. Напишите тесты для ваших изменений
-5. Отправьте Pull Request
+1. Прочитайте [Contributing Guide](./CONTRIBUTING.md) - полное руководство по участию
+2. Ознакомьтесь с [Coding Style Guide](./docs/guides/coding-style-guide.md)
+3. Изучите [Architecture](./docs/architecture/c4-model.md)
+4. Создайте feature branch
+5. Напишите тесты для ваших изменений
+6. Отправьте Pull Request
 
 ### Стандарты | Standards
 
@@ -171,6 +206,7 @@ cd NFC-bumber
 - Код должен проходить ktlint проверку
 - Unit тесты с покрытием ≥80%
 - Документация для публичных API
+- CI/CD проверки должны пройти успешно
 
 ## 📋 Roadmap
 
