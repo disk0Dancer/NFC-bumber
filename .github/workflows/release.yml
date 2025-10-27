@@ -107,7 +107,7 @@ jobs:
           fi
           
           # Save to file
-          echo "## Changes" > CHANGELOG.md
+        uses: softprops/action-gh-release@v1.10.0
           echo "" >> CHANGELOG.md
           echo "$CHANGELOG" >> CHANGELOG.md
           echo "" >> CHANGELOG.md
