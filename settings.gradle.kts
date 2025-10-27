@@ -1,6 +1,6 @@
 pluginManagement {
     repositories {
-        google()
+        maven { url = uri("https://maven.google.com") }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -8,7 +8,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        google()
+        maven { url = uri("https://maven.google.com") }
         mavenCentral()
     }
     versionCatalogs {
