@@ -32,6 +32,7 @@ dependencyResolutionManagement {
             version("datastore", "1.0.0")
             version("biometric", "1.1.0")
             version("accompanist", "0.32.0")
+            version("security-crypto", "1.1.0-alpha06")
             
             // Test versions
             version("junit", "5.10.1")
@@ -87,6 +88,9 @@ dependencyResolutionManagement {
 
             // Accompanist
             library("accompanist-permissions", "com.google.accompanist", "accompanist-permissions").versionRef("accompanist")
+
+            // Security
+            library("security-crypto", "androidx.security", "security-crypto").versionRef("security-crypto")
 
             // Testing
             library("junit-jupiter-api", "org.junit.jupiter", "junit-jupiter-api").versionRef("junit")
