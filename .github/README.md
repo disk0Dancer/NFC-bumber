@@ -45,6 +45,24 @@ Our DevOps setup is designed to be **economical** and efficient, minimizing GitH
 
 **Estimated cost**: ~2-3 minutes per run
 
+### 📦 Release Build (`release.yml`)
+
+**Triggers**: Version tags (v1.0.0, v1.1.0, etc.) or manual trigger
+
+**What it does**:
+- ✅ Builds release APK
+- ✅ Generates changelog from git commits
+- ✅ Creates GitHub Release
+- ✅ Uploads APK as release asset
+- ✅ Supports Obtainium for easy updates
+
+**Optimizations**:
+- Only runs on version tags (not every commit)
+- Uses Gradle caching
+- 30-minute timeout
+
+**Estimated cost**: ~8-10 minutes per release (infrequent)
+
 ### 🏷️ Auto Labeling (`auto-label.yml`)
 
 **Triggers**: Pull Request opened, reopened, or synchronized
@@ -82,6 +100,7 @@ Our DevOps setup is designed to be **economical** and efficient, minimizing GitH
 - Only runs on important branches (`main`, `develop`)
 - Pull requests trigger lightweight checks
 - Scheduled jobs run weekly, not daily
+- Release builds only on version tags (infrequent)
 
 ### 3. **Concurrency Control**
 - Cancels outdated workflow runs automatically
@@ -113,16 +132,18 @@ Based on GitHub Actions free tier (2,000 minutes/month for public repos):
 - PR Checks: 10 PRs × 3 runs × 3 min = 90 minutes
 - Auto Label: 30 runs × 0.5 min = 15 minutes
 - Stale Issues: 4 runs × 1 min = 4 minutes
+- Releases: 1 release × 10 min = 10 minutes
 
-**Total: ~270 minutes/month** (13.5% of free tier)
+**Total: ~280 minutes/month** (14% of free tier)
 
 ### Heavy Usage (30 PRs/month, 50 commits to main/develop)
 - Main CI: 50 commits × 8 min = 400 minutes
 - PR Checks: 30 PRs × 4 runs × 3 min = 360 minutes
 - Auto Label: 90 runs × 0.5 min = 45 minutes
 - Stale Issues: 4 runs × 1 min = 4 minutes
+- Releases: 2 releases × 10 min = 20 minutes
 
-**Total: ~810 minutes/month** (40.5% of free tier)
+**Total: ~830 minutes/month** (41.5% of free tier)
 
 **Result**: Even with heavy usage, you stay well within the free tier! 🎉
 
