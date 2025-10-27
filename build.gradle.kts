@@ -1,12 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        google()
+        maven { url = uri("https://maven.google.com") }
         mavenCentral()
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.4.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.48")
         classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.0-1.0.13")
     }
@@ -14,7 +14,7 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
+        maven { url = uri("https://maven.google.com") }
         mavenCentral()
     }
 }
