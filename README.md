@@ -1,5 +1,34 @@
 # NFC Card Emulator (NFC-bumber)
 
+[![Latest Release](https://img.shields.io/github/v/release/disk0Dancer/NFC-bumber?label=Latest%20Release&color=brightgreen)](https://github.com/disk0Dancer/NFC-bumber/releases/latest)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](LICENSE)
+[![Android](https://img.shields.io/badge/Android-8.0%2B-green.svg)](https://developer.android.com)
+
+## 📲 Установка | Installation
+
+### Через Obtainium (Рекомендуется | Recommended) 🚀
+
+[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/disk0Dancer/NFC-bumber)
+
+**Что такое Obtainium? | What is Obtainium?**
+
+Obtainium - это приложение для автоматического отслеживания и установки обновлений open-source приложений напрямую из GitHub. | Obtainium is an app for automatically tracking and installing updates of open-source apps directly from GitHub.
+
+**Как установить | How to install:**
+1. Установите [Obtainium](https://github.com/ImranR98/Obtainium/releases/latest)
+2. Нажмите на значок выше или добавьте вручную: `https://github.com/disk0Dancer/NFC-bumber`
+3. Obtainium автоматически установит приложение и будет следить за обновлениями
+
+### Прямая установка APK | Direct APK Installation
+
+[**📥 Скачать последнюю версию | Download Latest Version**](https://github.com/disk0Dancer/NFC-bumber/releases/latest)
+
+1. Скачайте `.apk` файл из [Releases](https://github.com/disk0Dancer/NFC-bumber/releases)
+2. Включите "Установка из неизвестных источников" в настройках Android
+3. Установите APK файл
+
+---
+
 ## Обзор | Overview
 
 **Русский:**

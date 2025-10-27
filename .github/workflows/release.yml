@@ -1,0 +1,124 @@
+name: Release Build
+
+# Trigger on version tags (v1.0.0, v1.1.0, etc.)
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:  # Allow manual trigger
+
+# Cancel previous runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    name: Build and Release APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    permissions:
+      contents: write  # Required to create releases
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for changelog
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      
+      # Extract version from tag (v1.0.0 -> 1.0.0)
+      - name: Get version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+      
+      # Build release APK
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+      
+      # Sign APK if keystore is available (optional for now)
+      # Users can add signing config later
+      
+      # Rename APK to include version
+      - name: Rename APK
+        run: |
+          mkdir -p release-artifacts
+          cp app/build/outputs/apk/release/app-release-unsigned.apk release-artifacts/NFC-bumber-${{ steps.version.outputs.version }}.apk || \
+          cp app/build/outputs/apk/release/app-release.apk release-artifacts/NFC-bumber-${{ steps.version.outputs.version }}.apk || \
+          echo "APK not found, will be generated when app module exists"
+      
+      # Generate changelog from commits since last tag
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          # Get previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          if [ -z "$PREV_TAG" ]; then
+            # First release
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
+          else
+            # Changes since last tag
+            CHANGELOG=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          fi
+          
+          # Save to file
+          echo "## Changes" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "$CHANGELOG" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "## Installation" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### Via Obtainium (Recommended)" >> CHANGELOG.md
+          echo "1. Install [Obtainium](https://github.com/ImranR98/Obtainium)" >> CHANGELOG.md
+          echo "2. Add this repository: \`https://github.com/${{ github.repository }}\`" >> CHANGELOG.md
+          echo "3. Obtainium will automatically track and install updates" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### Manual Installation" >> CHANGELOG.md
+          echo "1. Download \`NFC-bumber-${{ steps.version.outputs.version }}.apk\`" >> CHANGELOG.md
+          echo "2. Enable \"Install from Unknown Sources\" in Android settings" >> CHANGELOG.md
+          echo "3. Install the APK" >> CHANGELOG.md
+          
+          cat CHANGELOG.md
+      
+      # Create GitHub Release
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release-artifacts/*.apk
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, 'alpha') || contains(steps.version.outputs.version, 'beta') || contains(steps.version.outputs.version, 'rc') }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Release Summary
+        run: |
+          echo "✅ Release v${{ steps.version.outputs.version }} created successfully!"
+          echo "📦 APK: NFC-bumber-${{ steps.version.outputs.version }}.apk"
+          echo "🔗 https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.version }}"
