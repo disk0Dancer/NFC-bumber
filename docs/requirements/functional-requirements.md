@@ -566,29 +566,29 @@ This document specifies the functional requirements for the NFC Card Emulator An
 
 ## FR-9: Future Features (Not in MVP)
 
-### FR-9.1: Cloud Backup [WON'T HAVE IN V1]
-**Description**: Allow users to backup cards to cloud storage.
+### FR-9.1: Local Backup/Restore [WON'T HAVE IN V1]
+**Description**: Export and import cards to/from local files for backup purposes.
 
 **Priority**: P3 (Future)
 
 ---
 
-### FR-9.2: Card Sharing [WON'T HAVE IN V1]
-**Description**: Share cards between users via NFC or QR code.
+### FR-9.2: Card Statistics [WON'T HAVE IN V1]
+**Description**: Display usage statistics for each card (frequency, last usage, etc.).
 
 **Priority**: P3 (Future)
 
 ---
 
-### FR-9.3: Multiple Card Emulation [WON'T HAVE IN V1]
-**Description**: Rotate between multiple cards automatically.
+### FR-9.3: Advanced Customization [WON'T HAVE IN V1]
+**Description**: Custom themes, widgets, and card layouts.
 
 **Priority**: P3 (Future)
 
 ---
 
-### FR-9.4: Wear OS Support [WON'T HAVE IN V1]
-**Description**: Companion app for smartwatches.
+### FR-9.4: Tablet Optimization [WON'T HAVE IN V1]
+**Description**: Optimized layouts and multi-pane UI for tablets.
 
 **Priority**: P3 (Future)
 

@@ -355,9 +355,9 @@ class NfcEmulatorService : HostApduService() {
 
 ## Future Enhancements
 
-1. Cloud backup/sync
-2. Multi-device support
-3. Card sharing between users
-4. Advanced card editing
-5. NFC P2P card transfer
-6. Wear OS companion app
+1. Local backup/restore (file export/import)
+2. Advanced card editing (custom fields, notes)
+3. Enhanced UI customization (themes, widgets)
+4. Tablet optimization
+5. Card usage statistics and analytics
+6. Advanced security features (secure folder integration)
