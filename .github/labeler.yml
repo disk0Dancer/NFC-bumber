@@ -1,0 +1,47 @@
+# Configuration for auto-labeling PRs based on changed files
+documentation:
+  - docs/**/*
+  - '**/*.md'
+  - LICENSE
+
+dependencies:
+  - '**/gradle-wrapper.properties'
+  - '**/gradle.properties'
+  - '**/*.gradle'
+  - '**/*.gradle.kts'
+
+github-actions:
+  - .github/workflows/**
+  - .github/**/*.yml
+  - .github/**/*.yaml
+
+build:
+  - '**/build.gradle*'
+  - gradle/**
+  - gradlew*
+  - proguard-rules.pro
+
+tests:
+  - '**/test/**'
+  - '**/androidTest/**'
+  - '**/*Test.kt'
+  - '**/*Tests.kt'
+
+security:
+  - '**/security/**'
+  - SECURITY.md
+
+ui:
+  - '**/presentation/**'
+  - '**/ui/**'
+  - '**/res/**'
+
+data:
+  - '**/data/**'
+  - '**/database/**'
+  - '**/model/**'
+
+service:
+  - '**/service/**'
+  - '**/nfc/**'
+  - '**/hce/**'
