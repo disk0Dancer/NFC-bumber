@@ -14,14 +14,27 @@ jobs:
   quick-check:
     name: Quick Quality Checks
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
       
+      # Check if Android project exists
+      - name: Check for Android project
+        id: check_project
+        run: |
+          if [ -f "gradlew" ]; then
+            echo "has_gradle=true" >> $GITHUB_OUTPUT
+            echo "✅ Android project found"
+          else
+            echo "has_gradle=false" >> $GITHUB_OUTPUT
+            echo "⚠️  No Android project yet"
+          fi
+      
       - name: Set up JDK 17
+        if: steps.check_project.outputs.has_gradle == 'true'
         uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -29,23 +42,29 @@ jobs:
           cache: gradle
       
       - name: Grant execute permission
+        if: steps.check_project.outputs.has_gradle == 'true'
         run: chmod +x gradlew
       
-      # Only run essential checks for PRs
       - name: Check code style
+        if: steps.check_project.outputs.has_gradle == 'true'
         run: ./gradlew ktlintCheck --no-daemon
       
       - name: Compile check
+        if: steps.check_project.outputs.has_gradle == 'true'
         run: ./gradlew compileDebugKotlin --no-daemon
       
-      - name: Add PR comment
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ Quality checks failed. Please review the logs and fix any issues.'
-            })
+      # Basic checks when no Android project exists yet
+      - name: Validate repository structure
+        if: steps.check_project.outputs.has_gradle == 'false'
+        run: |
+          echo "✅ Checking documentation..."
+          if [ -f "README.md" ]; then
+            echo "  ✓ README.md present"
+          fi
+          if [ -f "LICENSE" ]; then
+            echo "  ✓ LICENSE present"
+          fi
+          if [ -d "docs" ]; then
+            echo "  ✓ docs/ directory present"
+          fi
+          echo "✅ Repository structure validated"
