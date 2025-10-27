@@ -1,0 +1,1 @@
+# Domain layer ProGuard rules
