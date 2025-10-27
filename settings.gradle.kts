@@ -55,6 +55,7 @@ dependencyResolutionManagement {
             library("lifecycle-runtime-ktx", "androidx.lifecycle", "lifecycle-runtime-ktx").versionRef("lifecycle")
             library("lifecycle-viewmodel-ktx", "androidx.lifecycle", "lifecycle-viewmodel-ktx").versionRef("lifecycle")
             library("lifecycle-viewmodel-compose", "androidx.lifecycle", "lifecycle-viewmodel-compose").versionRef("lifecycle")
+            library("lifecycle-runtime-compose", "androidx.lifecycle", "lifecycle-runtime-compose").versionRef("lifecycle")
 
             // Compose
             library("compose-bom", "androidx.compose", "compose-bom").versionRef("compose-bom")
@@ -108,7 +109,7 @@ dependencyResolutionManagement {
 
             // Bundles
             bundle("compose", listOf("compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material3"))
-            bundle("lifecycle", listOf("lifecycle-runtime-ktx", "lifecycle-viewmodel-ktx", "lifecycle-viewmodel-compose"))
+            bundle("lifecycle", listOf("lifecycle-runtime-ktx", "lifecycle-viewmodel-ktx", "lifecycle-viewmodel-compose", "lifecycle-runtime-compose"))
             bundle("room", listOf("room-runtime", "room-ktx"))
             bundle("coroutines", listOf("coroutines-core", "coroutines-android"))
         }
