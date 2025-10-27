@@ -281,27 +281,27 @@
 
 ---
 
-### Scenario 10: Backup and Recovery (Future Feature)
+### Scenario 10: Local Backup (Future Feature)
 
-**Context**: User gets new phone and wants to transfer cards
+**Context**: User wants to backup cards to local storage for safekeeping
 
 **Steps**:
-1. On old phone, user opens Settings
+1. On device, user opens Settings
 2. User taps "Backup Cards"
 3. System exports encrypted card data
-4. User saves to cloud/email/file
-5. On new phone, user installs app
-6. User taps "Restore Cards"
-7. User selects backup file
-8. User authenticates
+4. User chooses save location (Downloads, Documents, etc.)
+5. File is saved locally
+6. On new device or after reinstall, user taps "Restore Cards"
+7. User selects backup file from storage
+8. User authenticates if required
 9. System imports cards
 10. All cards appear in slider
 
 **Success Criteria**:
-- Encrypted backup
+- Encrypted local backup
 - Easy transfer process
 - No data loss
-- Works across Android versions
+- Works without internet
 
 ---
 
@@ -420,7 +420,7 @@
 
 ### Transparency
 - Clear explanation of data storage
-- No cloud sync by default (offline-first)
+- All data stored locally (offline-first)
 - No analytics without consent
 - Open source potential
 

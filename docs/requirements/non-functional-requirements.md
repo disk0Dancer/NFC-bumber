@@ -213,7 +213,7 @@ This document specifies the non-functional requirements (NFRs) for the NFC Card 
 **Metrics**:
 - Zero data loss incidents
 - Atomic database transactions
-- Backup/restore capability (future)
+- Local backup capability (future)
 
 **Implementation**:
 - Database transactions
