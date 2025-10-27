@@ -8,7 +8,7 @@
 
 ### Через Obtainium (Рекомендуется | Recommended) 🚀
 
-[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/disk0Dancer/NFC-bumber)
+[<img src="assets/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/disk0Dancer/NFC-bumber)
 
 **Что такое Obtainium? | What is Obtainium?**
 
