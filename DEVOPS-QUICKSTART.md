@@ -78,6 +78,8 @@ chore: обновить зависимости
 **Создание релиза | Creating a release:**
 ```bash
 # Создать тег версии | Create version tag
+# Поддерживаются форматы: v1.0.0 или 1.0.0
+# Supported formats: v1.0.0 or 1.0.0
 git tag -a v1.0.0 -m "Release 1.0.0"
 git push origin v1.0.0
 
