@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/hce_service_description"
+    android:requireDeviceUnlock="false"
+    android:apduServiceBanner="@mipmap/ic_launcher">
+    
+    <!-- Default AID for generic card emulation -->
+    <aid-group android:description="@string/aid_group_description" android:category="other">
+        <!-- Generic application identifier for NFC card emulation -->
+        <aid-filter android:name="F0010203040506"/>
+        <!-- Alternative AID for compatibility -->
+        <aid-filter android:name="A0000000031010"/>
+    </aid-group>
+</host-apdu-service>
