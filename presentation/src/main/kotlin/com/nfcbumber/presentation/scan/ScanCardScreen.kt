@@ -6,7 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nfcbumber.data.nfc.NfcCardData
 import com.nfcbumber.domain.util.toHexString
-import kotlin.random.Random
 
 /**
  * Screen for scanning NFC cards.
@@ -108,7 +107,7 @@ private fun ScanningPrompt() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Icon(
-            imageVector = Phone,
+            imageVector = Icons.Default.CreditCard,
             contentDescription = null,
             modifier = Modifier.size(120.dp),
             tint = MaterialTheme.colorScheme.primary
@@ -145,7 +144,7 @@ private fun ScanningInProgress() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Icon(
-            imageVector = Phone,
+            imageVector = Icons.Default.CreditCard,
             contentDescription = null,
             modifier = Modifier
                 .size(120.dp)

@@ -61,9 +61,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.navigation.compose)
     debugImplementation(libs.compose.ui.tooling)
-    
-    // Material Icons Extended - добавлено для PhoneAndroid иконки
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation("androidx.compose.material:material:1.9.4")
 
     // Hilt
     implementation(libs.hilt.android)
