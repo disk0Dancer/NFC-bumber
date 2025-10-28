@@ -1,8 +1,5 @@
 package com.nfcbumber.presentation.cardlist
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nfcbumber.data.security.SecureStorage
@@ -14,7 +11,6 @@ import com.nfcbumber.domain.usecase.ExportCardsUseCase
 import com.nfcbumber.domain.usecase.GetAllCardsUseCase
 import com.nfcbumber.domain.usecase.ImportCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,8 +28,7 @@ class CardListViewModel @Inject constructor(
     private val deleteCardUseCase: DeleteCardUseCase,
     private val exportCardsUseCase: ExportCardsUseCase,
     private val importCardsUseCase: ImportCardsUseCase,
-    private val secureStorage: SecureStorage,
-    @ApplicationContext private val context: Context
+    private val secureStorage: SecureStorage
 ) : ViewModel() {
 
     companion object {
@@ -114,18 +109,6 @@ class CardListViewModel @Inject constructor(
         _selectedCardId.value = cardId
         // Save to secure storage for HCE service
         secureStorage.putLong(KEY_SELECTED_CARD_ID, cardId)
-        
-        // Update widget with selected card
-        viewModelScope.launch {
-            try {
-                val card = allCards.find { it.id == cardId }
-                card?.let {
-                    updateWidgets(it.name, it.cardType.name)
-                }
-            } catch (e: Exception) {
-                // Ignore widget update errors
-            }
-        }
     }
 
     fun deleteCard(cardId: Long) {
@@ -188,38 +171,6 @@ class CardListViewModel @Inject constructor(
 
     fun refresh() {
         loadCards()
-    }
-    
-    private fun updateWidgets(cardName: String, cardType: String) {
-        try {
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = ComponentName(context, "com.nfcbumber.widget.CardWidgetProvider")
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-            
-            // Update all widgets
-            for (appWidgetId in appWidgetIds) {
-                // Simple direct update using RemoteViews
-                val views = android.widget.RemoteViews(
-                    context.packageName,
-                    com.nfcbumber.R.layout.widget_card
-                )
-                views.setTextViewText(com.nfcbumber.R.id.widget_card_name, cardName)
-                views.setTextViewText(com.nfcbumber.R.id.widget_card_type, cardType)
-                
-                val intent = android.content.Intent(context, Class.forName("com.nfcbumber.MainActivity"))
-                val pendingIntent = android.app.PendingIntent.getActivity(
-                    context,
-                    0,
-                    intent,
-                    android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
-                )
-                views.setOnClickPendingIntent(com.nfcbumber.R.id.widget_container, pendingIntent)
-                
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            }
-        } catch (e: Exception) {
-            // Widget update may fail if widgets not added, ignore
-        }
     }
 }
 

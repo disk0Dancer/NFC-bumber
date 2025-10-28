@@ -26,7 +26,7 @@ class SettingsViewModel @Inject constructor(
     val dynamicColor: StateFlow<Boolean> = _dynamicColor.asStateFlow()
 
     private fun loadThemeMode(): ThemeMode {
-        val value = secureStorage.getString(KEY_THEME_MODE, ThemeMode.SYSTEM.name)
+        val value = secureStorage.getString(KEY_THEME_MODE, ThemeMode.SYSTEM.name) ?: ThemeMode.SYSTEM.name
         return try {
             ThemeMode.valueOf(value)
         } catch (e: Exception) {

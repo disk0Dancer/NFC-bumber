@@ -7,15 +7,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -86,7 +85,7 @@ fun CardListScreen(
                     ) {
                         DropdownMenuItem(
                             text = { Text("Export Cards") },
-                            leadingIcon = { Icon(Icons.Default.Upload, contentDescription = null) },
+                            leadingIcon = { Icon(Icons.Default.Share, contentDescription = null) },
                             onClick = {
                                 showMenu = false
                                 showExportDialog = true
@@ -94,7 +93,7 @@ fun CardListScreen(
                         )
                         DropdownMenuItem(
                             text = { Text("Import Cards") },
-                            leadingIcon = { Icon(Icons.Default.Download, contentDescription = null) },
+                            leadingIcon = { Icon(Icons.Default.Add, contentDescription = null) },
                             onClick = {
                                 showMenu = false
                                 showImportDialog = true
@@ -255,7 +254,7 @@ private fun EmptyContent(onAddCard: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = Icons.Default.CreditCard,
+            imageVector = Icons.Default.AccountBox,
             contentDescription = null,
             modifier = Modifier.size(120.dp),
             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
