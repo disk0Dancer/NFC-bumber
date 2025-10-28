@@ -45,11 +45,11 @@ class CardListViewModel @Inject constructor(
                     _uiState.value = if (cards.isEmpty()) {
                         CardListUiState.Empty
                     } else {
-                        CardListUiState.Success(cards)
                         // Auto-select first card if none selected
                         if (_selectedCardId.value == null && cards.isNotEmpty()) {
                             _selectedCardId.value = cards.first().id
                         }
+                        CardListUiState.Success(cards)
                     }
                 }
         }
