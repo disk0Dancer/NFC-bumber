@@ -131,7 +131,7 @@ fun MainNavigation(
             // Clear view model reference when leaving screen
             DisposableEffect(Unit) {
                 onDispose {
-                    onScanViewModelCreated(null as? ScanCardViewModel ?: return@onDispose)
+                    onScanViewModelCreated(null)
                     viewModel.resetState()
                 }
             }
