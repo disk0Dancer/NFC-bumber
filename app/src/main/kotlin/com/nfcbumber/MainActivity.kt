@@ -21,6 +21,8 @@ import com.nfcbumber.presentation.cardlist.CardListScreen
 import com.nfcbumber.presentation.cardlist.CardListViewModel
 import com.nfcbumber.presentation.scan.ScanCardScreen
 import com.nfcbumber.presentation.scan.ScanCardViewModel
+import com.nfcbumber.presentation.settings.SettingsScreen
+import com.nfcbumber.presentation.settings.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -55,16 +57,9 @@ class MainActivity : ComponentActivity() {
         )
         
         setContent {
-            NfcBumberTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    MainNavigation(
-                        onScanViewModelCreated = { scanViewModel = it }
-                    )
-                }
-            }
+            MainApp(
+                onScanViewModelCreated = { scanViewModel = it }
+            )
         }
     }
 
@@ -98,8 +93,33 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun MainApp(
+    onScanViewModelCreated: (ScanCardViewModel?) -> Unit
+) {
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
+    val themeMode by settingsViewModel.themeMode.collectAsState()
+    val dynamicColor by settingsViewModel.dynamicColor.collectAsState()
+
+    com.nfcbumber.presentation.theme.NfcBumberTheme(
+        themeMode = themeMode,
+        dynamicColor = dynamicColor
+    ) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            MainNavigation(
+                settingsViewModel = settingsViewModel,
+                onScanViewModelCreated = onScanViewModelCreated
+            )
+        }
+    }
+}
+
+@Composable
 fun MainNavigation(
-    onScanViewModelCreated: (ScanCardViewModel) -> Unit
+    settingsViewModel: SettingsViewModel,
+    onScanViewModelCreated: (ScanCardViewModel?) -> Unit
 ) {
     val navController = rememberNavController()
 
@@ -108,14 +128,23 @@ fun MainNavigation(
             val viewModel: CardListViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
             val selectedCardId by viewModel.selectedCardId.collectAsState()
+            val searchQuery by viewModel.searchQuery.collectAsState()
+            val backupState by viewModel.backupState.collectAsState()
 
             CardListScreen(
                 uiState = uiState,
                 selectedCardId = selectedCardId,
+                searchQuery = searchQuery,
+                backupState = backupState,
                 onCardSelect = viewModel::selectCard,
                 onAddCard = { navController.navigate("scan") },
                 onDeleteCard = viewModel::deleteCard,
-                onRefresh = viewModel::refresh
+                onRefresh = viewModel::refresh,
+                onSearchQueryChange = viewModel::updateSearchQuery,
+                onExportCards = viewModel::exportCards,
+                onImportCards = viewModel::importCards,
+                onResetBackupState = viewModel::resetBackupState,
+                onNavigateToSettings = { navController.navigate("settings") }
             )
         }
 
@@ -145,12 +174,18 @@ fun MainNavigation(
                 }
             )
         }
-    }
-}
 
-@Composable
-fun NfcBumberTheme(content: @Composable () -> Unit) {
-    MaterialTheme {
-        content()
+        composable("settings") {
+            val themeMode by settingsViewModel.themeMode.collectAsState()
+            val dynamicColor by settingsViewModel.dynamicColor.collectAsState()
+
+            SettingsScreen(
+                currentTheme = themeMode,
+                dynamicColor = dynamicColor,
+                onThemeChange = settingsViewModel::setThemeMode,
+                onDynamicColorChange = settingsViewModel::setDynamicColor,
+                onBack = { navController.popBackStack() }
+            )
+        }
     }
 }

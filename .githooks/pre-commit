@@ -1,0 +1,20 @@
+#!/bin/bash
+# Pre-commit hook to run build before allowing commit
+# To install this hook, run: git config core.hooksPath .githooks
+
+echo "🔨 Running build check before commit..."
+
+# Run the build (without tests to keep it fast)
+./gradlew assembleDebug --no-daemon -q 2>&1 | tail -20
+
+# Check the exit status
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Build failed! Commit rejected."
+    echo "Please fix the build errors before committing."
+    echo "Run './gradlew assembleDebug' to see full error details."
+    exit 1
+fi
+
+echo "✅ Build passed! Proceeding with commit."
+exit 0
