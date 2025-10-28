@@ -50,6 +50,7 @@ dependencyResolutionManagement {
             plugin("kotlin-kapt", "org.jetbrains.kotlin.kapt").versionRef("kotlin")
             plugin("ksp", "com.google.devtools.ksp").versionRef("ksp")
             plugin("hilt", "com.google.dagger.hilt.android").versionRef("hilt")
+            plugin("room", "androidx.room.gradle.plugin").versionRef("room")
 
             // Core Android
             library("core-ktx", "androidx.core", "core-ktx").versionRef("core-ktx")
