@@ -57,7 +57,7 @@ NFC Card Emulator is a modern Android application for emulating NFC cards. The a
 - **Database**: Room
 - **Async**: Kotlin Coroutines + Flow
 - **Min SDK**: Android 8.0 (API 26)
-- **Target SDK**: Android 16 (API 35)
+- **Target SDK**: Android 14 (API 34)
 
 ## 📚 Документация | Documentation
 
@@ -137,6 +137,9 @@ NFC Card Emulator is a modern Android application for emulating NFC cards. The a
 # Клонировать репозиторий | Clone repository
 git clone https://github.com/disk0Dancer/NFC-bumber.git
 cd NFC-bumber
+
+# Установить git хуки (опционально) | Setup git hooks (optional)
+./.githooks/setup.sh
 
 # Открыть в Android Studio | Open in Android Studio
 # File > Open > Select project directory
@@ -258,11 +261,13 @@ cd NFC-bumber
 - [ ] Улучшенная обработка ошибок
 
 ### v2.0
-- [ ] Локальное резервное копирование (экспорт/импорт файлов)
-- [ ] Расширенная фильтрация и поиск карт
-- [ ] Виджеты на главный экран
-- [ ] Темы оформления
+- [x] Локальное резервное копирование (экспорт/импорт файлов)
+- [x] Расширенная фильтрация и поиск карт
+- [x] Виджеты на главный экран
+- [x] Темы оформления
 - [ ] Поддержка планшетов
+
+См. [V2_FEATURES.md](./V2_FEATURES.md) для деталей реализации v2.0 функций.
 
 ## 📄 Лицензия | License
 

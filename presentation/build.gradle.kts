@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.nfcbumber.presentation"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26
@@ -50,6 +50,7 @@ android {
 dependencies {
     // Modules
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     // Core
     implementation(libs.core.ktx)
