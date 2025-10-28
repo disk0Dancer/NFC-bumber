@@ -11,8 +11,8 @@ This project adheres to a code of conduct that all contributors are expected to 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/NFC-bumber.git
-   cd NFC-bumber
+   git clone https://github.com/YOUR_USERNAME/Wolle.git
+   cd Wolle
    ```
 3. **Set up the development environment** following the [Project Setup Guide](./docs/guides/project-setup.md)
 4. **Create a feature branch**:
@@ -24,7 +24,7 @@ This project adheres to a code of conduct that all contributors are expected to 
 
 ### Before You Start
 
-- Check existing [issues](https://github.com/disk0Dancer/NFC-bumber/issues) and [pull requests](https://github.com/disk0Dancer/NFC-bumber/pulls)
+- Check existing [issues](https://github.com/disk0Dancer/Wolle/issues) and [pull requests](https://github.com/disk0Dancer/Wolle/pulls)
 - For major changes, open an issue first to discuss your proposed changes
 - Read our [Coding Style Guide](./docs/guides/coding-style-guide.md)
 
@@ -146,8 +146,8 @@ Look for issues labeled `good first issue` - these are suitable for newcomers.
 
 ## Questions?
 
-- **General questions**: [GitHub Discussions](https://github.com/disk0Dancer/NFC-bumber/discussions)
-- **Bug reports**: [GitHub Issues](https://github.com/disk0Dancer/NFC-bumber/issues)
+- **General questions**: [GitHub Discussions](https://github.com/disk0Dancer/Wolle/discussions)
+- **Bug reports**: [GitHub Issues](https://github.com/disk0Dancer/Wolle/issues)
 - **Security issues**: Email the maintainer directly (see README)
 
 ## License

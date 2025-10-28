@@ -32,14 +32,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NfcBumber"
+        android:theme="@style/Theme.Wolle"
         tools:targetApi="31">
         
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.NfcBumber">
+            android:theme="@style/Theme.Wolle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -94,7 +94,7 @@
         <activity
             android:name=".widget.WidgetConfigurationActivity"
             android:exported="false"
-            android:theme="@style/Theme.NfcBumber"
+            android:theme="@style/Theme.Wolle"
             android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

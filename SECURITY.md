@@ -122,6 +122,6 @@ We follow responsible disclosure practices:
 
 ## Contact
 
-For security issues only: [Create a security advisory](https://github.com/disk0Dancer/NFC-bumber/security/advisories/new)
+For security issues only: [Create a security advisory](https://github.com/disk0Dancer/Wolle/security/advisories/new)
 
-For general issues: [GitHub Issues](https://github.com/disk0Dancer/NFC-bumber/issues)
+For general issues: [GitHub Issues](https://github.com/disk0Dancer/Wolle/issues)
