@@ -1,0 +1,7 @@
+{
+  "id": "com.nfcbumber",
+  "name": "Wolle",
+  "url": "https://github.com/disk0Dancer/Wolle",
+  "apkFilterRegEx": "^Wolle-.*\\.apk$",
+  "autoApkFilterByArch": false
+}

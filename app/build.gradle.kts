@@ -39,6 +39,20 @@ android {
             versionNameSuffix = "-debug"
         }
     }
+    
+    // Configure APK output naming for better compatibility with Obtainium
+    applicationVariants.all {
+        outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            val variantName = name
+            val versionName = defaultConfig.versionName
+            val appName = "Wolle"
+            
+            if (variantName.contains("release")) {
+                outputImpl.outputFileName = "${appName}-${versionName}.apk"
+            }
+        }
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
