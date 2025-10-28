@@ -20,8 +20,15 @@ import javax.inject.Inject
 @HiltViewModel
 class CardListViewModel @Inject constructor(
     private val getAllCardsUseCase: GetAllCardsUseCase,
-    private val deleteCardUseCase: DeleteCardUseCase
+    private val deleteCardUseCase: DeleteCardUseCase,
+    private val secureStorage: com.nfcbumber.data.security.SecureStorage
 ) : ViewModel() {
+
+    companion object {
+        private const val KEY_SELECTED_CARD_ID = "selected_card_id"
+        // Sentinel value for no card selection
+        private const val NO_CARD_SELECTED = -1L
+    }
 
     private val _uiState = MutableStateFlow<CardListUiState>(CardListUiState.Loading)
     val uiState: StateFlow<CardListUiState> = _uiState.asStateFlow()
@@ -30,6 +37,11 @@ class CardListViewModel @Inject constructor(
     val selectedCardId: StateFlow<Long?> = _selectedCardId.asStateFlow()
 
     init {
+        // Load previously selected card ID
+        val savedCardId = secureStorage.getLong(KEY_SELECTED_CARD_ID, NO_CARD_SELECTED)
+        if (savedCardId != NO_CARD_SELECTED) {
+            _selectedCardId.value = savedCardId
+        }
         loadCards()
     }
 
@@ -45,9 +57,14 @@ class CardListViewModel @Inject constructor(
                     _uiState.value = if (cards.isEmpty()) {
                         CardListUiState.Empty
                     } else {
-                        // Auto-select first card if none selected
-                        if (_selectedCardId.value == null && cards.isNotEmpty()) {
-                            _selectedCardId.value = cards.first().id
+                        // Auto-select first card if none selected or selected card doesn't exist
+                        val currentSelectedId = _selectedCardId.value
+                        val cardExists = cards.any { it.id == currentSelectedId }
+                        
+                        if (currentSelectedId == null || !cardExists) {
+                            val firstCardId = cards.first().id
+                            _selectedCardId.value = firstCardId
+                            secureStorage.putLong(KEY_SELECTED_CARD_ID, firstCardId)
                         }
                         CardListUiState.Success(cards)
                     }
@@ -57,6 +74,8 @@ class CardListViewModel @Inject constructor(
 
     fun selectCard(cardId: Long) {
         _selectedCardId.value = cardId
+        // Save to secure storage for HCE service
+        secureStorage.putLong(KEY_SELECTED_CARD_ID, cardId)
     }
 
     fun deleteCard(cardId: Long) {
@@ -66,6 +85,7 @@ class CardListViewModel @Inject constructor(
                     // If deleted card was selected, clear selection
                     if (_selectedCardId.value == cardId) {
                         _selectedCardId.value = null
+                        secureStorage.remove(KEY_SELECTED_CARD_ID)
                     }
                 },
                 onFailure = { error ->

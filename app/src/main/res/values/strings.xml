@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NFC Bumber</string>
+    
+    <!-- HCE Service descriptions -->
+    <string name="hce_service_description">NFC Card Emulator - Emulates your saved NFC cards</string>
+    <string name="aid_group_description">Generic NFC Card Emulation</string>
+    
+    <!-- Emulation notifications -->
+    <string name="emulation_active">Card emulation active</string>
+    <string name="emulation_notification_title">NFC Card Emulator</string>
+    <string name="emulation_notification_text">Emulating: %s</string>
 </resources>

@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.nfcbumber.domain.util.toHexString
 import com.nfcbumber.domain.model.Card
 
 /**
@@ -350,8 +351,4 @@ private fun ErrorContent(
             Text("Retry")
         }
     }
-}
-
-private fun ByteArray.toHexString(): String {
-    return joinToString("") { "%02X".format(it) }
 }
