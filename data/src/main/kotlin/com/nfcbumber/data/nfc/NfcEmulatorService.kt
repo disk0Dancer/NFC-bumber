@@ -257,4 +257,28 @@ private data class EmulatedCardData(
     val ats: ByteArray?,
     val historicalBytes: ByteArray?,
     val name: String
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EmulatedCardData) return false
+
+        if (!uid.contentEquals(other.uid)) return false
+        if (ats != null) {
+            if (other.ats == null || !ats.contentEquals(other.ats)) return false
+        } else if (other.ats != null) return false
+        if (historicalBytes != null) {
+            if (other.historicalBytes == null || !historicalBytes.contentEquals(other.historicalBytes)) return false
+        } else if (other.historicalBytes != null) return false
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = uid.contentHashCode()
+        result = 31 * result + (ats?.contentHashCode() ?: 0)
+        result = 31 * result + (historicalBytes?.contentHashCode() ?: 0)
+        result = 31 * result + name.hashCode()
+        return result
+    }
+}
