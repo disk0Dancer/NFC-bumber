@@ -46,6 +46,7 @@ dependencyResolutionManagement {
             plugin("android-application", "com.android.application").versionRef("agp")
             plugin("android-library", "com.android.library").versionRef("agp")
             plugin("kotlin-android", "org.jetbrains.kotlin.android").versionRef("kotlin")
+            plugin("kotlin-compose", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
             plugin("kotlin-kapt", "org.jetbrains.kotlin.kapt").versionRef("kotlin")
             plugin("ksp", "com.google.devtools.ksp").versionRef("ksp")
             plugin("hilt", "com.google.dagger.hilt.android").versionRef("hilt")
