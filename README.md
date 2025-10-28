@@ -138,6 +138,9 @@ NFC Card Emulator is a modern Android application for emulating NFC cards. The a
 git clone https://github.com/disk0Dancer/NFC-bumber.git
 cd NFC-bumber
 
+# Установить git хуки (опционально) | Setup git hooks (optional)
+./.githooks/setup.sh
+
 # Открыть в Android Studio | Open in Android Studio
 # File > Open > Select project directory
 
