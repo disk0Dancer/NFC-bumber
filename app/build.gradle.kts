@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.nfcbumber"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nfcbumber"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 4
         versionName = "2.0.0"
 
