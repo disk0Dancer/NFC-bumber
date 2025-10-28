@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nfcbumber.data.nfc.NfcCardData
-import com.nfcbumber.data.util.toHexString
+import com.nfcbumber.domain.util.toHexString
 import kotlin.random.Random
 
 /**

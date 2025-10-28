@@ -9,8 +9,8 @@ import android.nfc.tech.NfcB
 import android.nfc.tech.NfcF
 import android.nfc.tech.NfcV
 import android.util.Log
-import com.nfcbumber.data.util.toHexString
 import com.nfcbumber.domain.model.CardType
+import com.nfcbumber.domain.util.toHexString
 import javax.inject.Inject
 import javax.inject.Singleton
 

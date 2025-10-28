@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import com.nfcbumber.data.database.CardDao
 import com.nfcbumber.data.security.SecureStorage
-import com.nfcbumber.data.util.hexToByteArray
-import com.nfcbumber.data.util.toHexString
+import com.nfcbumber.domain.util.hexToByteArray
+import com.nfcbumber.domain.util.toHexString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,7 @@
 package com.nfcbumber.data.nfc
 
-import com.nfcbumber.data.util.hexToByteArray
-import com.nfcbumber.data.util.toHexString
+import com.nfcbumber.domain.util.hexToByteArray
+import com.nfcbumber.domain.util.toHexString
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

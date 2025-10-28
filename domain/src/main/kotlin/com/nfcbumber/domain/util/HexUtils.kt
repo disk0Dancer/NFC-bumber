@@ -1,4 +1,4 @@
-package com.nfcbumber.data.util
+package com.nfcbumber.domain.util
 
 /**
  * Utility functions for hex string and byte array conversions.
