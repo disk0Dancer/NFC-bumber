@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
@@ -8,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.nfcbumber"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nfcbumber"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 4
         versionName = "2.0.0"
 
@@ -58,11 +59,7 @@ android {
         buildConfig = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
-
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
@@ -90,6 +87,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
+    implementation("androidx.fragment:fragment:1.8.9")
     debugImplementation(libs.compose.ui.tooling)
 
     // Hilt

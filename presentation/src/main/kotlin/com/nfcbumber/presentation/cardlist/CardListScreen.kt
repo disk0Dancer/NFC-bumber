@@ -1,9 +1,8 @@
 package com.nfcbumber.presentation.cardlist
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -14,7 +13,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -42,15 +40,11 @@ fun CardListScreen(
     onDeleteCard: (Long) -> Unit,
     onRefresh: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
-    onExportCards: (String) -> Unit,
-    onImportCards: (String) -> Unit,
     onResetBackupState: () -> Unit,
     onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var showMenu by remember { mutableStateOf(false) }
-    var showExportDialog by remember { mutableStateOf(false) }
-    var showImportDialog by remember { mutableStateOf(false) }
     var showSearchBar by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -67,7 +61,7 @@ fun CardListScreen(
                             }
                         )
                     } else {
-                        Text("NFC Card Emulator") 
+                        Text("Wolle")
                     }
                 },
                 actions = {
@@ -83,23 +77,6 @@ fun CardListScreen(
                         expanded = showMenu,
                         onDismissRequest = { showMenu = false }
                     ) {
-                        DropdownMenuItem(
-                            text = { Text("Export Cards") },
-                            leadingIcon = { Icon(Icons.Default.Share, contentDescription = null) },
-                            onClick = {
-                                showMenu = false
-                                showExportDialog = true
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Import Cards") },
-                            leadingIcon = { Icon(Icons.Default.Add, contentDescription = null) },
-                            onClick = {
-                                showMenu = false
-                                showImportDialog = true
-                            }
-                        )
-                        Divider()
                         DropdownMenuItem(
                             text = { Text("Settings") },
                             leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null) },
@@ -183,28 +160,6 @@ fun CardListScreen(
             )
         }
         BackupState.Idle -> { /* No dialog */ }
-    }
-
-    // Export dialog
-    if (showExportDialog) {
-        ExportDialog(
-            onConfirm = { fileName ->
-                onExportCards(fileName)
-                showExportDialog = false
-            },
-            onDismiss = { showExportDialog = false }
-        )
-    }
-
-    // Import dialog
-    if (showImportDialog) {
-        ImportDialog(
-            onConfirm = { fileName ->
-                onImportCards(fileName)
-                showImportDialog = false
-            },
-            onDismiss = { showImportDialog = false }
-        )
     }
 }
 
@@ -323,42 +278,21 @@ private fun CardListContent(
     onCardSelect: (Long) -> Unit,
     onDeleteCard: (Long) -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        // Card slider
-        val listState = rememberLazyListState()
-        
-        LazyRow(
-            state = listState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(cards, key = { it.id }) { card ->
-                CardItem(
-                    card = card,
-                    isSelected = card.id == selectedCardId,
-                    onClick = { onCardSelect(card.id) }
-                )
-            }
-        }
+    val listState = rememberLazyListState()
 
-        // Selected card details
-        selectedCardId?.let { id ->
-            val selectedCard = cards.find { it.id == id }
-            selectedCard?.let { card ->
-                Divider()
-                CardDetailsSection(
-                    card = card,
-                    onDelete = { onDeleteCard(card.id) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
-            }
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(vertical = 16.dp)
+    ) {
+        items(cards, key = { it.id }) { card ->
+            CardItem(
+                card = card,
+                isSelected = card.id == selectedCardId,
+                onClick = { onCardSelect(card.id) },
+                onDelete = { onDeleteCard(card.id) }
+            )
         }
     }
 }
@@ -368,13 +302,17 @@ private fun CardListContent(
 private fun CardItem(
     card: Card,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onDelete: () -> Unit
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
     Card(
-        onClick = onClick,
+        onClick = { isExpanded = !isExpanded },
         modifier = Modifier
-            .width(200.dp)
-            .height(120.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(card.color)
         ),
@@ -387,83 +325,117 @@ private fun CardItem(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
+            // Card header
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = card.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.White,
+                        maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = card.cardType.name.replace('_', ' '),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White.copy(alpha = 0.9f)
+                    )
+                }
+
+                if (isSelected) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = MaterialTheme.shapes.small,
+                        modifier = Modifier.padding(start = 8.dp)
+                    ) {
+                        Text(
+                            text = "ACTIVE",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+
+            // Usage info
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = card.name,
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.White,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                text = "Used ${card.usageCount} times",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White.copy(alpha = 0.7f)
             )
-            
-            Column {
+
+            // NFC emission info when card is active
+            if (isSelected) {
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = card.cardType.name.replace('_', ' '),
+                    text = "⚡ Active - NFC signal is being emulated",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White.copy(alpha = 0.9f)
                 )
-                Text(
-                    text = "Used ${card.usageCount} times",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White.copy(alpha = 0.7f)
-                )
             }
-        }
-    }
-}
 
-@Composable
-private fun CardDetailsSection(
-    card: Card,
-    onDelete: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
+            // Expandable details
+            if (isExpanded) {
+                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider(color = Color.White.copy(alpha = 0.3f))
+                Spacer(modifier = Modifier.height(16.dp))
 
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = "Card Details",
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        Card {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                DetailRow("Name", card.name)
-                DetailRow("Type", card.cardType.name.replace('_', ' '))
-                DetailRow("UID", card.uid.toHexString())
-                card.ats?.let {
-                    DetailRow("ATS", it.toHexString())
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    DetailRowLight("UID", card.uid.toHexString())
+                    card.ats?.let {
+                        DetailRowLight("ATS", it.toHexString())
+                    }
+                    card.historicalBytes?.let {
+                        DetailRowLight("Historical Bytes", it.toHexString())
+                    }
+                    DetailRowLight("Created", card.createdAt.toString())
+                    card.lastUsedAt?.let {
+                        DetailRowLight("Last Used", it.toString())
+                    }
                 }
-                card.historicalBytes?.let {
-                    DetailRow("Historical Bytes", it.toHexString())
-                }
-                DetailRow("Usage Count", card.usageCount.toString())
-                DetailRow("Created", card.createdAt.toString())
-                card.lastUsedAt?.let {
-                    DetailRow("Last Used", it.toString())
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (!isSelected) {
+                        Button(
+                            onClick = { onClick() },
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White.copy(alpha = 0.2f),
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Text("Set as Active")
+                        }
+                    }
+
+                    Button(
+                        onClick = { showDeleteDialog = true },
+                        modifier = if (isSelected) Modifier.fillMaxWidth() else Modifier,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Icon(Icons.Default.Delete, contentDescription = "Delete")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Delete")
+                    }
                 }
             }
-        }
-
-        Button(
-            onClick = { showDeleteDialog = true },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.error
-            ),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(Icons.Default.Delete, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Delete Card")
         }
     }
 
@@ -492,21 +464,18 @@ private fun CardDetailsSection(
 }
 
 @Composable
-private fun DetailRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
+private fun DetailRowLight(label: String, value: String) {
+    Column {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f)
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.White.copy(alpha = 0.7f)
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.weight(2f)
+            color = Color.White,
+            modifier = Modifier.padding(start = 8.dp)
         )
     }
 }
@@ -593,86 +562,3 @@ private fun ErrorDialog(
     )
 }
 
-@Composable
-private fun ExportDialog(
-    onConfirm: (String) -> Unit,
-    onDismiss: () -> Unit
-) {
-    var fileName by remember { mutableStateOf("nfc_cards_backup.json") }
-    
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Export Cards") },
-        text = {
-            Column {
-                Text("Enter file name for the backup:")
-                Spacer(modifier = Modifier.height(8.dp))
-                TextField(
-                    value = fileName,
-                    onValueChange = { fileName = it },
-                    singleLine = true
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    val downloadDir = android.os.Environment.getExternalStoragePublicDirectory(
-                        android.os.Environment.DIRECTORY_DOWNLOADS
-                    )
-                    val filePath = "${downloadDir.absolutePath}/$fileName"
-                    onConfirm(filePath)
-                }
-            ) {
-                Text("Export")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-
-@Composable
-private fun ImportDialog(
-    onConfirm: (String) -> Unit,
-    onDismiss: () -> Unit
-) {
-    var fileName by remember { mutableStateOf("nfc_cards_backup.json") }
-    
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Import Cards") },
-        text = {
-            Column {
-                Text("Enter file name to import from:")
-                Spacer(modifier = Modifier.height(8.dp))
-                TextField(
-                    value = fileName,
-                    onValueChange = { fileName = it },
-                    singleLine = true
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    val downloadDir = android.os.Environment.getExternalStoragePublicDirectory(
-                        android.os.Environment.DIRECTORY_DOWNLOADS
-                    )
-                    val filePath = "${downloadDir.absolutePath}/$fileName"
-                    onConfirm(filePath)
-                }
-            ) {
-                Text("Import")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
-}

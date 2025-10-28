@@ -8,7 +8,7 @@
 
 ## 📖 Обзор проекта | Project Overview
 
-**Название**: NFC Card Emulator (NFC-bumber)  
+**Название**: Wolle - NFC Card Emulator  
 **Описание**: Современное Android приложение для эмуляции NFC карт  
 **Лицензия**: BSD 3-Clause  
 **Язык**: Kotlin  
@@ -295,8 +295,8 @@
 
 Если вы нашли ошибки, неточности или у вас есть предложения по улучшению документации:
 
-1. **Создайте Issue**: [GitHub Issues](https://github.com/disk0Dancer/NFC-bumber/issues)
-2. **Начните Discussion**: [GitHub Discussions](https://github.com/disk0Dancer/NFC-bumber/discussions)
+1. **Создайте Issue**: [GitHub Issues](https://github.com/disk0Dancer/Wolle/issues)
+2. **Начните Discussion**: [GitHub Discussions](https://github.com/disk0Dancer/Wolle/discussions)
 3. **Отправьте PR**: С исправлениями или дополнениями
 
 ---
@@ -328,4 +328,4 @@
 
 **Готовы начать? | Ready to start?** → [Project Setup Guide](./guides/project-setup.md)
 
-**Есть вопросы? | Have questions?** → [GitHub Discussions](https://github.com/disk0Dancer/NFC-bumber/discussions)
+**Есть вопросы? | Have questions?** → [GitHub Discussions](https://github.com/disk0Dancer/Wolle/discussions)

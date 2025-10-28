@@ -1,13 +1,14 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.kapt")
     id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.nfcbumber.presentation"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -41,10 +42,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
 }
 
 dependencies {
@@ -61,9 +58,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.navigation.compose)
     debugImplementation(libs.compose.ui.tooling)
-    
-    // Material Icons Extended - добавлено для PhoneAndroid иконки
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation("androidx.compose.material:material:1.9.4")
 
     // Hilt
     implementation(libs.hilt.android)

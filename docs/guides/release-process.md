@@ -31,7 +31,7 @@ git push origin v1.0.0
    - Upload the APK as a release asset
 
 3. **The release will be available at:**
-   - https://github.com/disk0Dancer/NFC-bumber/releases
+   - https://github.com/disk0Dancer/Wolle/releases
 
 ## Version Numbering
 
@@ -74,7 +74,7 @@ If you need to create a release manually:
 ./gradlew assembleRelease
 ```
 
-2. Go to [Releases](https://github.com/disk0Dancer/NFC-bumber/releases)
+2. Go to [Releases](https://github.com/disk0Dancer/Wolle/releases)
 3. Click "Draft a new release"
 4. Choose a tag (or create a new one)
 5. Fill in release notes
@@ -100,7 +100,7 @@ Currently, releases are unsigned. To add signing:
 
 1. Create a keystore:
 ```bash
-keytool -genkey -v -keystore release.keystore -alias nfc-bumber -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -keystore release.keystore -alias wolle -keyalg RSA -keysize 2048 -validity 10000
 ```
 
 2. Add secrets to GitHub:
@@ -158,4 +158,4 @@ After release, monitor:
 
 For questions about releases, see:
 - [CONTRIBUTING.md](../CONTRIBUTING.md)
-- [GitHub Discussions](https://github.com/disk0Dancer/NFC-bumber/discussions)
+- [GitHub Discussions](https://github.com/disk0Dancer/Wolle/discussions)

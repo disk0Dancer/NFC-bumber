@@ -68,7 +68,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun NfcBumberTheme(
+fun WolleTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit

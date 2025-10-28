@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NFC Bumber</string>
-    
+    <string name="app_name">Wolle</string>
+
     <!-- HCE Service descriptions -->
-    <string name="hce_service_description">NFC Card Emulator - Emulates your saved NFC cards</string>
+    <string name="hce_service_description">Wolle - NFC Card Emulator</string>
     <string name="aid_group_description">Generic NFC Card Emulation</string>
     
     <!-- Emulation notifications -->
     <string name="emulation_active">Card emulation active</string>
-    <string name="emulation_notification_title">NFC Card Emulator</string>
+    <string name="emulation_notification_title">Wolle NFC</string>
     <string name="emulation_notification_text">Emulating: %s</string>
     
     <!-- Widget -->
-    <string name="widget_description">Quick access to your selected NFC card</string>
+    <string name="widget_description">Quick access to your NFC card</string>
 </resources>
