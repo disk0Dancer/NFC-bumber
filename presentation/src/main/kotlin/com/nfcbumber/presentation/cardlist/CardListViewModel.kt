@@ -26,6 +26,8 @@ class CardListViewModel @Inject constructor(
 
     companion object {
         private const val KEY_SELECTED_CARD_ID = "selected_card_id"
+        // Sentinel value for no card selection
+        private const val NO_CARD_SELECTED = -1L
     }
 
     private val _uiState = MutableStateFlow<CardListUiState>(CardListUiState.Loading)
@@ -36,8 +38,8 @@ class CardListViewModel @Inject constructor(
 
     init {
         // Load previously selected card ID
-        val savedCardId = secureStorage.getString(KEY_SELECTED_CARD_ID)?.toLongOrNull()
-        if (savedCardId != null) {
+        val savedCardId = secureStorage.getLong(KEY_SELECTED_CARD_ID, NO_CARD_SELECTED)
+        if (savedCardId != NO_CARD_SELECTED) {
             _selectedCardId.value = savedCardId
         }
         loadCards()
@@ -62,7 +64,7 @@ class CardListViewModel @Inject constructor(
                         if (currentSelectedId == null || !cardExists) {
                             val firstCardId = cards.first().id
                             _selectedCardId.value = firstCardId
-                            secureStorage.putString(KEY_SELECTED_CARD_ID, firstCardId.toString())
+                            secureStorage.putLong(KEY_SELECTED_CARD_ID, firstCardId)
                         }
                         CardListUiState.Success(cards)
                     }
@@ -73,7 +75,7 @@ class CardListViewModel @Inject constructor(
     fun selectCard(cardId: Long) {
         _selectedCardId.value = cardId
         // Save to secure storage for HCE service
-        secureStorage.putString(KEY_SELECTED_CARD_ID, cardId.toString())
+        secureStorage.putLong(KEY_SELECTED_CARD_ID, cardId)
     }
 
     fun deleteCard(cardId: Long) {

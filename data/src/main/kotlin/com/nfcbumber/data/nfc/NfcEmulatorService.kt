@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import com.nfcbumber.data.database.CardDao
 import com.nfcbumber.data.security.SecureStorage
+import com.nfcbumber.data.util.hexToByteArray
+import com.nfcbumber.data.util.toHexString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,16 +38,19 @@ class NfcEmulatorService : HostApduService() {
         private const val READ_BINARY_COMMAND: Byte = 0xB0.toByte()
         
         // Status Words (ISO 7816-4)
-        private val SW_SUCCESS = hexStringToByteArray("9000")
-        private val SW_FILE_NOT_FOUND = hexStringToByteArray("6A82")
-        private val SW_WRONG_LENGTH = hexStringToByteArray("6700")
-        private val SW_COMMAND_NOT_ALLOWED = hexStringToByteArray("6986")
-        private val SW_UNKNOWN = hexStringToByteArray("6F00")
+        private val SW_SUCCESS = "9000".hexToByteArray()
+        private val SW_FILE_NOT_FOUND = "6A82".hexToByteArray()
+        private val SW_WRONG_LENGTH = "6700".hexToByteArray()
+        private val SW_COMMAND_NOT_ALLOWED = "6986".hexToByteArray()
+        private val SW_UNKNOWN = "6F00".hexToByteArray()
         
         // AID (Application Identifier) - Default for generic HCE
         private const val DEFAULT_AID = "F0010203040506"
         
         private const val KEY_SELECTED_CARD_ID = "selected_card_id"
+        
+        // Sentinel value for no card selection
+        private const val NO_CARD_SELECTED = -1L
     }
 
     override fun processCommandApdu(commandApdu: ByteArray?, extras: Bundle?): ByteArray {
@@ -175,9 +180,9 @@ class NfcEmulatorService : HostApduService() {
      */
     private fun getSelectedCard(): EmulatedCardData? {
         return try {
-            val selectedCardId = secureStorage.getLong(KEY_SELECTED_CARD_ID, -1)
+            val selectedCardId = secureStorage.getLong(KEY_SELECTED_CARD_ID, NO_CARD_SELECTED)
             
-            if (selectedCardId == -1L) {
+            if (selectedCardId == NO_CARD_SELECTED) {
                 Log.w(TAG, "No card selected")
                 return null
             }
@@ -209,8 +214,8 @@ class NfcEmulatorService : HostApduService() {
     private fun updateCardUsage() {
         serviceScope.launch {
             try {
-                val selectedCardId = secureStorage.getLong(KEY_SELECTED_CARD_ID, -1)
-                if (selectedCardId != -1L) {
+                val selectedCardId = secureStorage.getLong(KEY_SELECTED_CARD_ID, NO_CARD_SELECTED)
+                if (selectedCardId != NO_CARD_SELECTED) {
                     val timestamp = System.currentTimeMillis()
                     cardDao.updateCardUsage(selectedCardId, timestamp)
                     Log.d(TAG, "Updated usage for card: $selectedCardId")
@@ -221,36 +226,8 @@ class NfcEmulatorService : HostApduService() {
         }
     }
 
-    // Extension functions for byte array conversions
-    private fun ByteArray.toHexString(): String {
-        return joinToString("") { "%02X".format(it) }
-    }
+    // Extension functions for byte array conversions are in HexUtils.kt
 
-}
-
-/**
- * Extension function to convert a hex string to a byte array.
- */
-fun String.hexToByteArray(): ByteArray {
-    val len = this.length
-    val data = ByteArray(len / 2)
-    var i = 0
-    while (i < len) {
-        data[i / 2] = ((Character.digit(this[i], 16) shl 4) + Character.digit(this[i + 1], 16)).toByte()
-        i += 2
-    }
-    return data
-}
-
-/**
- * Extension to SecureStorage for Long values.
- */
-private fun SecureStorage.getLong(key: String, defaultValue: Long): Long {
-    return getString(key)?.toLongOrNull() ?: defaultValue
-}
-
-private fun SecureStorage.putLong(key: String, value: Long) {
-    putString(key, value.toString())
 }
 
 /**
