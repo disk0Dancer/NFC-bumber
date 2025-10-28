@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Small widget layout (1x1) - Compact icon-only view -->
+<!-- Small widget layout (1x1) - Compact view with card name only -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="4dp">
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,31 +12,33 @@
         android:orientation="vertical"
         android:background="@drawable/widget_background"
         android:gravity="center"
-        android:padding="8dp">
+        android:padding="12dp">
 
         <ImageView
             android:id="@+id/widget_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="@string/app_name" />
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_wolle_logo"
+            android:contentDescription="Wolle NFC"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/widget_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NFC"
-            android:textSize="10sp"
+            android:text="Card"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:maxLines="1"
+            android:maxLines="2"
             android:ellipsize="end"
             android:gravity="center"
-            android:layout_marginTop="2dp" />
+            android:layout_marginTop="4dp" />
 
+        <!-- Hidden type field required by widget provider -->
         <TextView
             android:id="@+id/widget_card_type"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone" />
 

@@ -2,6 +2,7 @@ package com.nfcbumber.presentation.cardlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nfcbumber.data.nfc.NfcEmulationManager
 import com.nfcbumber.data.security.SecureStorage
 import com.nfcbumber.domain.model.BackupResult
 import com.nfcbumber.domain.model.Card
@@ -28,7 +29,8 @@ class CardListViewModel @Inject constructor(
     private val deleteCardUseCase: DeleteCardUseCase,
     private val exportCardsUseCase: ExportCardsUseCase,
     private val importCardsUseCase: ImportCardsUseCase,
-    private val secureStorage: SecureStorage
+    private val secureStorage: SecureStorage,
+    private val emulationManager: NfcEmulationManager
 ) : ViewModel() {
 
     companion object {
@@ -109,16 +111,19 @@ class CardListViewModel @Inject constructor(
         _selectedCardId.value = cardId
         // Save to secure storage for HCE service
         secureStorage.putLong(KEY_SELECTED_CARD_ID, cardId)
+        // Activate NFC emulation for this card
+        emulationManager.activateEmulation(cardId)
     }
 
     fun deleteCard(cardId: Long) {
         viewModelScope.launch {
             deleteCardUseCase(cardId).fold(
                 onSuccess = {
-                    // If deleted card was selected, clear selection
+                    // If deleted card was selected, clear selection and deactivate emulation
                     if (_selectedCardId.value == cardId) {
                         _selectedCardId.value = null
                         secureStorage.remove(KEY_SELECTED_CARD_ID)
+                        emulationManager.deactivateEmulation()
                     }
                 },
                 onFailure = { error ->

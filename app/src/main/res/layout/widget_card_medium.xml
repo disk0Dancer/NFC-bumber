@@ -1,56 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Medium widget layout (2x1) - Horizontal card view -->
+<!-- Medium widget layout (2x1) - Horizontal card view with name only -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="4dp">
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:background="@drawable/widget_background"
-        android:gravity="center_vertical"
-        android:padding="12dp">
+        android:gravity="center"
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/widget_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="@string/app_name"
-            android:layout_marginEnd="12dp" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_wolle_logo"
+            android:contentDescription="Wolle NFC"
+            android:scaleType="fitCenter"
+            android:layout_marginEnd="16dp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/widget_card_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:text="Card Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="center_vertical" />
 
-            <TextView
-                android:id="@+id/widget_card_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:maxLines="1"
-                android:ellipsize="end" />
-
-            <TextView
-                android:id="@+id/widget_card_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="11sp"
-                android:textColor="#CCCCCC"
-                android:layout_marginTop="2dp"
-                android:maxLines="1"
-                android:ellipsize="end" />
-
-        </LinearLayout>
+        <!-- Hidden type field required by widget provider -->
+        <TextView
+            android:id="@+id/widget_card_type"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 

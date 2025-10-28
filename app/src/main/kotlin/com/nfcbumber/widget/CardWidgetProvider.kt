@@ -7,13 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
-import com.nfcbumber.MainActivity
 import com.nfcbumber.R
 import com.nfcbumber.data.security.SecureStorage
+import com.nfcbumber.presentation.widget.CardEmulationActivity
 
 /**
  * Widget provider for displaying selected NFC card on home screen.
- * Note: AppWidgetProvider does not support Hilt injection, so we instantiate SecureStorage manually.
+ * Each widget is bound to a specific card and launches fullscreen card emulation on tap.
  */
 class CardWidgetProvider : AppWidgetProvider() {
 
@@ -79,7 +79,7 @@ class CardWidgetProvider : AppWidgetProvider() {
             val cardType = secureStorage.getString("widget_card_type_$appWidgetId", "Tap to select")
             val cardColor = secureStorage.getInt("widget_card_color_$appWidgetId", 0xFF2196F3.toInt())
 
-            // Create an Intent to launch MainActivity or configuration
+            // Create an Intent to launch CardEmulationActivity or configuration
             val intent = if (cardId == -1L) {
                 // No card selected, open configuration
                 Intent(context, WidgetConfigurationActivity::class.java).apply {
@@ -87,8 +87,14 @@ class CardWidgetProvider : AppWidgetProvider() {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 }
             } else {
-                // Card selected, open main app
-                Intent(context, MainActivity::class.java)
+                // Card selected, open fullscreen card emulation
+                Intent(context, CardEmulationActivity::class.java).apply {
+                    putExtra("CARD_ID", cardId)
+                    putExtra("WIDGET_ID", appWidgetId)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                           Intent.FLAG_ACTIVITY_NO_ANIMATION or
+                           Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                }
             }
 
             val pendingIntent = PendingIntent.getActivity(
@@ -101,11 +107,11 @@ class CardWidgetProvider : AppWidgetProvider() {
             // Build the widget layout
             val views = RemoteViews(context.packageName, layoutId).apply {
                 setTextViewText(R.id.widget_card_name, cardName)
-                setTextViewText(R.id.widget_card_type, cardType)
                 setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-                // Set background color with transparency
-                setInt(R.id.widget_container, "setBackgroundColor", cardColor)
+                // Set background color with transparency for better visual
+                val transparentColor = (cardColor and 0x00FFFFFF) or 0xCC000000.toInt()
+                setInt(R.id.widget_container, "setBackgroundColor", transparentColor)
             }
 
             // Update the widget

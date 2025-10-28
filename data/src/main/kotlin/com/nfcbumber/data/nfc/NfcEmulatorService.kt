@@ -28,6 +28,9 @@ class NfcEmulatorService : HostApduService() {
     @Inject
     lateinit var secureStorage: SecureStorage
 
+    @Inject
+    lateinit var emulationManager: NfcEmulationManager
+
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     companion object {
@@ -54,6 +57,12 @@ class NfcEmulatorService : HostApduService() {
     }
 
     override fun processCommandApdu(commandApdu: ByteArray?, extras: Bundle?): ByteArray {
+        // Check if emulation is active
+        if (!emulationManager.isEmulationActive()) {
+            Log.d(TAG, "NFC emulation is not active, ignoring APDU command")
+            return SW_FILE_NOT_FOUND
+        }
+
         if (commandApdu == null) {
             Log.w(TAG, "Received null APDU command")
             return SW_UNKNOWN
@@ -180,8 +189,8 @@ class NfcEmulatorService : HostApduService() {
      */
     private fun getSelectedCard(): EmulatedCardData? {
         return try {
-            val selectedCardId = secureStorage.getLong(KEY_SELECTED_CARD_ID, NO_CARD_SELECTED)
-            
+            val selectedCardId = emulationManager.getSelectedCardId()
+
             if (selectedCardId == NO_CARD_SELECTED) {
                 Log.w(TAG, "No card selected")
                 return null
