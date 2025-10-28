@@ -133,7 +133,7 @@ All requested v2.0 features from the problem statement have been successfully im
 
 ### Compatibility
 - Min SDK: Android 8.0 (API 26)
-- Target SDK: Android 15 (API 35)
+- Target SDK: Android 14 (API 34)
 - Dynamic theming: Android 12+ (API 31+)
 - Widget: All Android versions with home screen support
 

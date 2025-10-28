@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.nfcbumber.presentation"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26
