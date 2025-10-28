@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nfcbumber.data.security.SecureStorage
 import com.nfcbumber.domain.model.BackupResult
 import com.nfcbumber.domain.model.Card
 import com.nfcbumber.domain.model.RestoreResult
@@ -31,7 +32,7 @@ class CardListViewModel @Inject constructor(
     private val deleteCardUseCase: DeleteCardUseCase,
     private val exportCardsUseCase: ExportCardsUseCase,
     private val importCardsUseCase: ImportCardsUseCase,
-    private val secureStorage: com.nfcbumber.data.security.SecureStorage,
+    private val secureStorage: SecureStorage,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
