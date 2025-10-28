@@ -8,8 +8,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,16 +35,71 @@ import com.nfcbumber.domain.model.Card
 fun CardListScreen(
     uiState: CardListUiState,
     selectedCardId: Long?,
+    searchQuery: String,
+    backupState: BackupState,
     onCardSelect: (Long) -> Unit,
     onAddCard: () -> Unit,
     onDeleteCard: (Long) -> Unit,
     onRefresh: () -> Unit,
+    onSearchQueryChange: (String) -> Unit,
+    onExportCards: (String) -> Unit,
+    onImportCards: (String) -> Unit,
+    onResetBackupState: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+    var showExportDialog by remember { mutableStateOf(false) }
+    var showImportDialog by remember { mutableStateOf(false) }
+    var showSearchBar by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("NFC Card Emulator") }
+                title = { 
+                    if (showSearchBar) {
+                        SearchBar(
+                            query = searchQuery,
+                            onQueryChange = onSearchQueryChange,
+                            onClose = { 
+                                showSearchBar = false
+                                onSearchQueryChange("")
+                            }
+                        )
+                    } else {
+                        Text("NFC Card Emulator") 
+                    }
+                },
+                actions = {
+                    if (!showSearchBar) {
+                        IconButton(onClick = { showSearchBar = true }) {
+                            Icon(Icons.Default.Search, contentDescription = "Search")
+                        }
+                    }
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                    }
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Export Cards") },
+                            leadingIcon = { Icon(Icons.Default.Upload, contentDescription = null) },
+                            onClick = {
+                                showMenu = false
+                                showExportDialog = true
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Import Cards") },
+                            leadingIcon = { Icon(Icons.Default.Download, contentDescription = null) },
+                            onClick = {
+                                showMenu = false
+                                showImportDialog = true
+                            }
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -60,7 +120,11 @@ fun CardListScreen(
                     LoadingContent()
                 }
                 is CardListUiState.Empty -> {
-                    EmptyContent(onAddCard = onAddCard)
+                    if (searchQuery.isEmpty()) {
+                        EmptyContent(onAddCard = onAddCard)
+                    } else {
+                        EmptySearchContent(onClearSearch = { onSearchQueryChange("") })
+                    }
                 }
                 is CardListUiState.Success -> {
                     CardListContent(
@@ -79,6 +143,85 @@ fun CardListScreen(
             }
         }
     }
+
+    // Backup state dialogs
+    when (backupState) {
+        is BackupState.Exporting -> {
+            LoadingDialog("Exporting cards...")
+        }
+        is BackupState.Importing -> {
+            LoadingDialog("Importing cards...")
+        }
+        is BackupState.ExportSuccess -> {
+            SuccessDialog(
+                title = "Export Successful",
+                message = "${backupState.cardsCount} cards exported successfully",
+                onDismiss = onResetBackupState
+            )
+        }
+        is BackupState.ImportSuccess -> {
+            SuccessDialog(
+                title = "Import Successful",
+                message = "${backupState.imported} cards imported, ${backupState.skipped} skipped (already exist)",
+                onDismiss = onResetBackupState
+            )
+        }
+        is BackupState.Error -> {
+            ErrorDialog(
+                message = backupState.message,
+                onDismiss = onResetBackupState
+            )
+        }
+        BackupState.Idle -> { /* No dialog */ }
+    }
+
+    // Export dialog
+    if (showExportDialog) {
+        ExportDialog(
+            onConfirm = { fileName ->
+                onExportCards(fileName)
+                showExportDialog = false
+            },
+            onDismiss = { showExportDialog = false }
+        )
+    }
+
+    // Import dialog
+    if (showImportDialog) {
+        ImportDialog(
+            onConfirm = { fileName ->
+                onImportCards(fileName)
+                showImportDialog = false
+            },
+            onDismiss = { showImportDialog = false }
+        )
+    }
+}
+
+@Composable
+private fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onClose: () -> Unit
+) {
+    TextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text("Search cards...") },
+        singleLine = true,
+        trailingIcon = {
+            IconButton(onClick = onClose) {
+                Icon(Icons.Default.Close, contentDescription = "Close search")
+            }
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
+    )
 }
 
 @Composable
@@ -124,6 +267,41 @@ private fun EmptyContent(onAddCard: () -> Unit) {
             Icon(Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             Text("Add Card")
+        }
+    }
+}
+
+@Composable
+private fun EmptySearchContent(onClearSearch: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = null,
+            modifier = Modifier.size(120.dp),
+            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "No Results Found",
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Try adjusting your search query",
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = onClearSearch) {
+            Text("Clear Search")
         }
     }
 }
@@ -351,4 +529,140 @@ private fun ErrorContent(
             Text("Retry")
         }
     }
+}
+
+@Composable
+private fun LoadingDialog(message: String) {
+    AlertDialog(
+        onDismissRequest = { },
+        confirmButton = { },
+        text = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                Text(message)
+            }
+        }
+    )
+}
+
+@Composable
+private fun SuccessDialog(
+    title: String,
+    message: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = { Text(message) },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("OK")
+            }
+        }
+    )
+}
+
+@Composable
+private fun ErrorDialog(
+    message: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Error") },
+        text = { Text(message) },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("OK")
+            }
+        }
+    )
+}
+
+@Composable
+private fun ExportDialog(
+    onConfirm: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var fileName by remember { mutableStateOf("nfc_cards_backup.json") }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Export Cards") },
+        text = {
+            Column {
+                Text("Enter file name for the backup:")
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = fileName,
+                    onValueChange = { fileName = it },
+                    singleLine = true
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val downloadDir = android.os.Environment.getExternalStoragePublicDirectory(
+                        android.os.Environment.DIRECTORY_DOWNLOADS
+                    )
+                    val filePath = "${downloadDir.absolutePath}/$fileName"
+                    onConfirm(filePath)
+                }
+            ) {
+                Text("Export")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+private fun ImportDialog(
+    onConfirm: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var fileName by remember { mutableStateOf("nfc_cards_backup.json") }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Import Cards") },
+        text = {
+            Column {
+                Text("Enter file name to import from:")
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = fileName,
+                    onValueChange = { fileName = it },
+                    singleLine = true
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val downloadDir = android.os.Environment.getExternalStoragePublicDirectory(
+                        android.os.Environment.DIRECTORY_DOWNLOADS
+                    )
+                    val filePath = "${downloadDir.absolutePath}/$fileName"
+                    onConfirm(filePath)
+                }
+            ) {
+                Text("Import")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }

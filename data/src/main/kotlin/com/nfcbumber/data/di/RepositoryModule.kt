@@ -1,6 +1,8 @@
 package com.nfcbumber.data.di
 
+import com.nfcbumber.data.repository.BackupRepositoryImpl
 import com.nfcbumber.data.repository.CardRepositoryImpl
+import com.nfcbumber.domain.repository.BackupRepository
 import com.nfcbumber.domain.repository.CardRepository
 import dagger.Binds
 import dagger.Module
@@ -20,4 +22,10 @@ abstract class RepositoryModule {
     abstract fun bindCardRepository(
         cardRepositoryImpl: CardRepositoryImpl
     ): CardRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBackupRepository(
+        backupRepositoryImpl: BackupRepositoryImpl
+    ): BackupRepository
 }
