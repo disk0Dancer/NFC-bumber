@@ -141,8 +141,6 @@ fun MainNavigation(
                 onDeleteCard = viewModel::deleteCard,
                 onRefresh = viewModel::refresh,
                 onSearchQueryChange = viewModel::updateSearchQuery,
-                onExportCards = viewModel::exportCards,
-                onImportCards = viewModel::importCards,
                 onResetBackupState = viewModel::resetBackupState,
                 onNavigateToSettings = { navController.navigate("settings") }
             )
