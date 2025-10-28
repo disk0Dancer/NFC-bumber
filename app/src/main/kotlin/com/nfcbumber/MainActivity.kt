@@ -23,6 +23,7 @@ import com.nfcbumber.presentation.scan.ScanCardScreen
 import com.nfcbumber.presentation.scan.ScanCardViewModel
 import com.nfcbumber.presentation.settings.SettingsScreen
 import com.nfcbumber.presentation.settings.SettingsViewModel
+import com.nfcbumber.presentation.theme.WolleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -100,7 +101,7 @@ fun MainApp(
     val themeMode by settingsViewModel.themeMode.collectAsState()
     val dynamicColor by settingsViewModel.dynamicColor.collectAsState()
 
-    com.nfcbumber.presentation.theme.NfcBumberTheme(
+    WolleTheme(
         themeMode = themeMode,
         dynamicColor = dynamicColor
     ) {

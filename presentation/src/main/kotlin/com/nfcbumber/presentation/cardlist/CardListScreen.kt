@@ -61,7 +61,7 @@ fun CardListScreen(
                             }
                         )
                     } else {
-                        Text("NFC Card Emulator") 
+                        Text("Wolle")
                     }
                 },
                 actions = {
@@ -378,7 +378,7 @@ private fun CardItem(
             if (isSelected) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "⚡ NFC signal is being emulated - device can be read by NFC readers",
+                    text = "⚡ Active - NFC signal is being emulated",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White.copy(alpha = 0.9f)
                 )
@@ -410,24 +410,29 @@ private fun CardItem(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Button(
-                        onClick = { onClick() },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White.copy(alpha = 0.2f),
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Text(if (isSelected) "Deactivate" else "Activate")
+                    if (!isSelected) {
+                        Button(
+                            onClick = { onClick() },
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White.copy(alpha = 0.2f),
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Text("Set as Active")
+                        }
                     }
 
                     Button(
                         onClick = { showDeleteDialog = true },
+                        modifier = if (isSelected) Modifier.fillMaxWidth() else Modifier,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error
                         )
                     ) {
                         Icon(Icons.Default.Delete, contentDescription = "Delete")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Delete")
                     }
                 }
             }

@@ -22,7 +22,7 @@ import com.nfcbumber.data.security.SecureStorage
 import com.nfcbumber.domain.model.Card
 import com.nfcbumber.presentation.cardlist.CardListUiState
 import com.nfcbumber.presentation.cardlist.CardListViewModel
-import com.nfcbumber.presentation.theme.NfcBumberTheme
+import com.nfcbumber.presentation.theme.WolleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -54,7 +54,7 @@ class WidgetConfigurationActivity : ComponentActivity() {
         }
 
         setContent {
-            NfcBumberTheme {
+            WolleTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

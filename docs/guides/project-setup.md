@@ -46,13 +46,13 @@
 
 ```bash
 # Using HTTPS
-git clone https://github.com/disk0Dancer/NFC-bumber.git
+git clone https://github.com/disk0Dancer/Wolle.git
 
 # Using SSH
-git clone git@github.com:disk0Dancer/NFC-bumber.git
+git clone git@github.com:disk0Dancer/Wolle.git
 
 # Navigate to project directory
-cd NFC-bumber
+cd Wolle
 ```
 
 ### 2. Configure Android Studio
@@ -109,7 +109,7 @@ Run the following commands to verify setup:
 ## Project Structure
 
 ```
-NFC-bumber/
+Wolle/
 ├── .github/                    # GitHub Actions workflows
 ├── app/                        # Main application module
 │   ├── src/
@@ -684,8 +684,8 @@ org.gradle.jvmargs=-Xmx4096m
 
 ## Getting Help
 
-- **Issues**: [GitHub Issues](https://github.com/disk0Dancer/NFC-bumber/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/disk0Dancer/NFC-bumber/discussions)
+- **Issues**: [GitHub Issues](https://github.com/disk0Dancer/Wolle/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/disk0Dancer/Wolle/discussions)
 - **Documentation**: `/docs` folder in repository
 - **Code Examples**: `/samples` folder (when available)
 

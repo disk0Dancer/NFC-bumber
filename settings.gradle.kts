@@ -118,7 +118,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NFC-bumber"
+rootProject.name = "Wolle"
 include(":app")
 include(":data")
 include(":domain")
