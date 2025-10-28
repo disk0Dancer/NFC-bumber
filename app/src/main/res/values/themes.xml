@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Wolle" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Transparent theme for fullscreen card emulation -->
+    <style name="Theme.Wolle.Transparent" parent="Theme.Wolle">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.0</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>

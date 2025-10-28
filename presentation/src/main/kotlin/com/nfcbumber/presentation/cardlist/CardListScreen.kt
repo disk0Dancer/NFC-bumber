@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -42,6 +43,7 @@ fun CardListScreen(
     onSearchQueryChange: (String) -> Unit,
     onResetBackupState: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    onCardDetails: (Long) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -118,7 +120,8 @@ fun CardListScreen(
                         cards = uiState.cards,
                         selectedCardId = selectedCardId,
                         onCardSelect = onCardSelect,
-                        onDeleteCard = onDeleteCard
+                        onDeleteCard = onDeleteCard,
+                        onCardDetails = onCardDetails
                     )
                 }
                 is CardListUiState.Error -> {
@@ -276,7 +279,8 @@ private fun CardListContent(
     cards: List<Card>,
     selectedCardId: Long?,
     onCardSelect: (Long) -> Unit,
-    onDeleteCard: (Long) -> Unit
+    onDeleteCard: (Long) -> Unit,
+    onCardDetails: (Long) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
 
@@ -291,7 +295,8 @@ private fun CardListContent(
                 card = card,
                 isSelected = card.id == selectedCardId,
                 onClick = { onCardSelect(card.id) },
-                onDelete = { onDeleteCard(card.id) }
+                onDelete = { onDeleteCard(card.id) },
+                onDetails = { onCardDetails(card.id) }
             )
         }
     }
@@ -303,7 +308,8 @@ private fun CardItem(
     card: Card,
     isSelected: Boolean,
     onClick: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onDetails: () -> Unit = {}
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -424,14 +430,27 @@ private fun CardItem(
                     }
 
                     Button(
+                        onClick = onDetails,
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White.copy(alpha = 0.2f),
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Icon(Icons.Default.Info, contentDescription = "Details")
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Info")
+                    }
+
+                    Button(
                         onClick = { showDeleteDialog = true },
-                        modifier = if (isSelected) Modifier.fillMaxWidth() else Modifier,
+                        modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error
                         )
                     ) {
                         Icon(Icons.Default.Delete, contentDescription = "Delete")
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text("Delete")
                     }
                 }

@@ -100,6 +100,16 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <!-- Card Emulation Fullscreen Activity -->
+        <activity
+            android:name=".presentation.widget.CardEmulationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Wolle.Transparent"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:noHistory="true" />
     </application>
 
 </manifest>

@@ -8,15 +8,19 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.nfcbumber.data.nfc.NfcEmulationManager
 import com.nfcbumber.presentation.cardlist.CardListScreen
 import com.nfcbumber.presentation.cardlist.CardListViewModel
 import com.nfcbumber.presentation.scan.ScanCardScreen
@@ -25,6 +29,7 @@ import com.nfcbumber.presentation.settings.SettingsScreen
 import com.nfcbumber.presentation.settings.SettingsViewModel
 import com.nfcbumber.presentation.theme.WolleTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Main activity for NFC Bumber application.
@@ -36,6 +41,9 @@ class MainActivity : ComponentActivity() {
     private var nfcAdapter: NfcAdapter? = null
     private var pendingIntent: PendingIntent? = null
     private var scanViewModel: ScanCardViewModel? = null
+
+    @Inject
+    lateinit var emulationManager: NfcEmulationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,12 +76,20 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // Enable foreground dispatch for NFC
         nfcAdapter?.enableForegroundDispatch(this, pendingIntent, null, null)
+
+        // Restore NFC emulation if a card was previously selected
+        val selectedCardId = emulationManager.getSelectedCardId()
+        if (selectedCardId != -1L) {
+            emulationManager.activateEmulation(selectedCardId)
+        }
     }
 
     override fun onPause() {
         super.onPause()
         // Disable foreground dispatch
         nfcAdapter?.disableForegroundDispatch(this)
+        // Deactivate NFC emulation when app goes to background
+        emulationManager.deactivateEmulation()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -143,7 +159,8 @@ fun MainNavigation(
                 onRefresh = viewModel::refresh,
                 onSearchQueryChange = viewModel::updateSearchQuery,
                 onResetBackupState = viewModel::resetBackupState,
-                onNavigateToSettings = { navController.navigate("settings") }
+                onNavigateToSettings = { navController.navigate("settings") },
+                onCardDetails = { cardId -> navController.navigate("cardDetails/$cardId") }
             )
         }
 
@@ -185,6 +202,46 @@ fun MainNavigation(
                 onDynamicColorChange = settingsViewModel::setDynamicColor,
                 onBack = { navController.popBackStack() }
             )
+        }
+
+        composable("cardDetails/{cardId}") { backStackEntry ->
+            val cardId = backStackEntry.arguments?.getString("cardId")?.toLongOrNull()
+
+            if (cardId != null) {
+                val viewModel: CardListViewModel = hiltViewModel()
+                val uiState by viewModel.uiState.collectAsState()
+
+                when (val state = uiState) {
+                    is com.nfcbumber.presentation.cardlist.CardListUiState.Success -> {
+                        val card = state.cards.find { it.id == cardId }
+                        if (card != null) {
+                            com.nfcbumber.presentation.carddetails.CardDetailsScreen(
+                                card = card,
+                                onBack = { navController.popBackStack() }
+                            )
+                        } else {
+                            // Card not found, go back
+                            LaunchedEffect(Unit) {
+                                navController.popBackStack()
+                            }
+                        }
+                    }
+                    else -> {
+                        // Loading or error, show loading indicator
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+            } else {
+                // Invalid card ID, go back
+                LaunchedEffect(Unit) {
+                    navController.popBackStack()
+                }
+            }
         }
     }
 }
