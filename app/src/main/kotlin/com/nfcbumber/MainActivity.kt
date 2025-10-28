@@ -108,14 +108,22 @@ fun MainNavigation(
             val viewModel: CardListViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsState()
             val selectedCardId by viewModel.selectedCardId.collectAsState()
+            val searchQuery by viewModel.searchQuery.collectAsState()
+            val backupState by viewModel.backupState.collectAsState()
 
             CardListScreen(
                 uiState = uiState,
                 selectedCardId = selectedCardId,
+                searchQuery = searchQuery,
+                backupState = backupState,
                 onCardSelect = viewModel::selectCard,
                 onAddCard = { navController.navigate("scan") },
                 onDeleteCard = viewModel::deleteCard,
-                onRefresh = viewModel::refresh
+                onRefresh = viewModel::refresh,
+                onSearchQueryChange = viewModel::updateSearchQuery,
+                onExportCards = viewModel::exportCards,
+                onImportCards = viewModel::importCards,
+                onResetBackupState = viewModel::resetBackupState
             )
         }
 
