@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -45,17 +44,12 @@ dependencies {
     // Coroutines
     implementation(libs.bundles.coroutines)
 
-    // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    // Dependency Injection - only javax.inject, not Hilt Android
+    implementation("javax.inject:javax.inject:1")
 
     // Testing
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
-}
-
-kapt {
-    correctErrorTypes = true
 }
