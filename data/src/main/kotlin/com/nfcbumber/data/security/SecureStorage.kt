@@ -83,6 +83,20 @@ class SecureStorage @Inject constructor(
         sharedPreferences.edit().clear().apply()
     }
 
+    /**
+     * Store a long value securely.
+     */
+    fun putLong(key: String, value: Long) {
+        putString(key, value.toString())
+    }
+
+    /**
+     * Retrieve a long value.
+     */
+    fun getLong(key: String, defaultValue: Long = 0): Long {
+        return getString(key)?.toLongOrNull() ?: defaultValue
+    }
+
     companion object {
         private const val PREFS_NAME = "nfc_bumber_secure_prefs"
         

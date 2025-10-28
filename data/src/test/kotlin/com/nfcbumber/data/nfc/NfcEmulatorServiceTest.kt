@@ -1,5 +1,7 @@
 package com.nfcbumber.data.nfc
 
+import com.nfcbumber.data.util.hexToByteArray
+import com.nfcbumber.data.util.toHexString
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -10,24 +12,24 @@ import org.junit.jupiter.api.Test
 class NfcEmulatorServiceTest {
 
     @Test
-    fun `hexStringToByteArray converts correctly`() {
+    fun `hexToByteArray converts correctly`() {
         // Given
         val hex = "9000"
         
         // When
-        val result = hexStringToByteArray(hex)
+        val result = hex.hexToByteArray()
         
         // Then
         assertArrayEquals(byteArrayOf(0x90.toByte(), 0x00), result)
     }
 
     @Test
-    fun `hexStringToByteArray handles longer strings`() {
+    fun `hexToByteArray handles longer strings`() {
         // Given
         val hex = "00A40400"
         
         // When
-        val result = hexStringToByteArray(hex)
+        val result = hex.hexToByteArray()
         
         // Then
         assertArrayEquals(
@@ -116,7 +118,7 @@ class NfcEmulatorServiceTest {
     @Test
     fun `Status word SUCCESS is 9000`() {
         // Given
-        val swSuccess = hexStringToByteArray("9000")
+        val swSuccess = "9000".hexToByteArray()
         
         // Then
         assertArrayEquals(byteArrayOf(0x90.toByte(), 0x00), swSuccess)
@@ -125,7 +127,7 @@ class NfcEmulatorServiceTest {
     @Test
     fun `Status word FILE_NOT_FOUND is 6A82`() {
         // Given
-        val swFileNotFound = hexStringToByteArray("6A82")
+        val swFileNotFound = "6A82".hexToByteArray()
         
         // Then
         assertArrayEquals(
@@ -138,7 +140,7 @@ class NfcEmulatorServiceTest {
     fun `UID concatenation with status word works correctly`() {
         // Given
         val uid = byteArrayOf(0x01, 0x02, 0x03, 0x04)
-        val swSuccess = hexStringToByteArray("9000")
+        val swSuccess = "9000".hexToByteArray()
         
         // When
         val response = uid + swSuccess
@@ -155,7 +157,7 @@ class NfcEmulatorServiceTest {
     fun `ATS concatenation with status word works correctly`() {
         // Given
         val ats = byteArrayOf(0x78, 0x77, 0x71, 0x02)
-        val swSuccess = hexStringToByteArray("9000")
+        val swSuccess = "9000".hexToByteArray()
         
         // When
         val response = ats + swSuccess
@@ -165,22 +167,5 @@ class NfcEmulatorServiceTest {
         // Last two bytes should be status word
         assertEquals(0x90.toByte(), response[response.size - 2])
         assertEquals(0x00.toByte(), response[response.size - 1])
-    }
-
-    // Helper functions (these would normally be private in the service)
-    private fun hexStringToByteArray(hex: String): ByteArray {
-        val len = hex.length
-        val data = ByteArray(len / 2)
-        var i = 0
-        while (i < len) {
-            data[i / 2] = ((Character.digit(hex[i], 16) shl 4) + 
-                          Character.digit(hex[i + 1], 16)).toByte()
-            i += 2
-        }
-        return data
-    }
-
-    private fun ByteArray.toHexString(): String {
-        return joinToString("") { "%02X".format(it) }
     }
 }

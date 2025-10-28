@@ -13,13 +13,18 @@ import javax.inject.Inject
 class GetSelectedCardUseCase @Inject constructor(
     private val cardRepository: CardRepository
 ) {
+    companion object {
+        // Sentinel value indicating no card is selected
+        private const val NO_CARD_SELECTED = -1L
+    }
+    
     /**
      * Get the selected card as a Flow.
      * @param selectedCardId The ID of the currently selected card.
      * @return Flow of the selected Card, or null if no card is selected.
      */
     operator fun invoke(selectedCardId: Long?): Flow<Card?> {
-        return if (selectedCardId != null && selectedCardId != -1L) {
+        return if (selectedCardId != null && selectedCardId != NO_CARD_SELECTED) {
             cardRepository.getAllCards().map { cards ->
                 cards.firstOrNull { it.id == selectedCardId }
             }
