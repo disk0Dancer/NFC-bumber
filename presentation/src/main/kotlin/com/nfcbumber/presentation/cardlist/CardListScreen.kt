@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -45,6 +46,7 @@ fun CardListScreen(
     onExportCards: (String) -> Unit,
     onImportCards: (String) -> Unit,
     onResetBackupState: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -96,6 +98,15 @@ fun CardListScreen(
                             onClick = {
                                 showMenu = false
                                 showImportDialog = true
+                            }
+                        )
+                        Divider()
+                        DropdownMenuItem(
+                            text = { Text("Settings") },
+                            leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                            onClick = {
+                                showMenu = false
+                                onNavigateToSettings()
                             }
                         )
                     }
