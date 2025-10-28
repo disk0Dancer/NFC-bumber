@@ -12,6 +12,6 @@
     android:initialLayout="@layout/widget_card_small"
     android:configure="com.nfcbumber.widget.WidgetConfigurationActivity"
     android:description="@string/widget_description"
-    android:previewImage="@drawable/ic_launcher_foreground"
+    android:previewImage="@drawable/ic_wolle_logo"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />

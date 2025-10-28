@@ -44,6 +44,7 @@ NFC Card Emulator is a modern Android application for emulating NFC cards. The a
 - 📡 **HCE эмуляция** | Host Card Emulation for terminal compatibility
 - 🔒 **Безопасность** | Encrypted storage with biometric protection
 - 🎨 **Material Design 3** | Modern Android design with dynamic theming
+- 🏠 **Виджеты** | Home screen widgets for instant card access
 - ⚡ **Быстро и удобно** | Fast, convenient, and easy to use
 
 ## 🏗️ Архитектура | Architecture
