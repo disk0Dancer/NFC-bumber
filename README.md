@@ -2,7 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/disk0Dancer/NFC-bumber?label=Latest%20Release&color=brightgreen)](https://github.com/disk0Dancer/NFC-bumber/releases/latest)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](LICENSE)
-[![Android](https://img.shields.io/badge/Android-8.0%2B-green.svg)](https://developer.android.com)
+[![Android](https://img.shields.io/badge/Android-8.0%2B%20%7C%20API%2035-green.svg)](https://developer.android.com)
 
 ## 📲 Установка | Installation
 
@@ -57,7 +57,7 @@ NFC Card Emulator is a modern Android application for emulating NFC cards. The a
 - **Database**: Room
 - **Async**: Kotlin Coroutines + Flow
 - **Min SDK**: Android 8.0 (API 26)
-- **Target SDK**: Android 14 (API 34)
+- **Target SDK**: Android 16 (API 35)
 
 ## 📚 Документация | Documentation
 
@@ -92,7 +92,18 @@ NFC Card Emulator is a modern Android application for emulating NFC cards. The a
 - ✅ Безопасное хранилище для настроек приложения
 - ✅ Unit тесты для слоя мапперов
 
-**Следующий этап | Next Phase**: Sprint 2 - Реализация NFC Card Reading функциональности
+**Sprint 2 (NFC Card Reading) - ✅ ЗАВЕРШЕН | COMPLETED**
+
+Реализованные компоненты | Implemented Components:
+- ✅ NFC Reader Service с поддержкой всех типов карт (ISO-DEP, MIFARE, NFC-A/B/F/V)
+- ✅ Экран сканирования карт с Material Design 3
+- ✅ Горизонтальный слайдер карт
+- ✅ Сохранение и управление картами
+- ✅ Use cases для работы с картами
+- ✅ ViewModels для сканирования и списка карт
+- ✅ Foreground NFC dispatch в MainActivity
+
+**Следующий этап | Next Phase**: Sprint 3 - HCE эмуляция и управление картами
 
 ## 🚀 Быстрый старт | Quick Start
 
@@ -216,10 +227,10 @@ cd NFC-bumber
 - [x] Настройка БД (Room) с шифрованием
 - [x] Система безопасности (AES-256, Keystore)
 - [x] Модульная архитектура (Clean Architecture)
-- [ ] Сканирование NFC карт
+- [x] Сканирование NFC карт
 - [ ] HCE эмуляция
-- [ ] Управление картами
-- [ ] Базовый UI с Material Design 3
+- [x] Управление картами
+- [x] Базовый UI с Material Design 3
 
 ### v1.1
 - [ ] Биометрическая аутентификация
