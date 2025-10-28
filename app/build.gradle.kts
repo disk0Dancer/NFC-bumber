@@ -87,6 +87,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)
+    implementation("androidx.fragment:fragment:1.8.9")
     debugImplementation(libs.compose.ui.tooling)
 
     // Hilt
