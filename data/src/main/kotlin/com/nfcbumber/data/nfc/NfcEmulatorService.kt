@@ -226,16 +226,20 @@ class NfcEmulatorService : HostApduService() {
         return joinToString("") { "%02X".format(it) }
     }
 
-    private fun hexStringToByteArray(hex: String): ByteArray {
-        val len = hex.length
-        val data = ByteArray(len / 2)
-        var i = 0
-        while (i < len) {
-            data[i / 2] = ((Character.digit(hex[i], 16) shl 4) + Character.digit(hex[i + 1], 16)).toByte()
-            i += 2
-        }
-        return data
+}
+
+/**
+ * Extension function to convert a hex string to a byte array.
+ */
+fun String.hexToByteArray(): ByteArray {
+    val len = this.length
+    val data = ByteArray(len / 2)
+    var i = 0
+    while (i < len) {
+        data[i / 2] = ((Character.digit(this[i], 16) shl 4) + Character.digit(this[i + 1], 16)).toByte()
+        i += 2
     }
+    return data
 }
 
 /**
