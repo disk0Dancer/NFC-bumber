@@ -255,11 +255,11 @@
 ## 📞 Support & Feedback
 
 ### Report Issues
-- GitHub Issues: https://github.com/disk0Dancer/NFC-bumber/issues
+- GitHub Issues: https://github.com/disk0Dancer/Wolle/issues
 - Include: Android version, device model, steps to reproduce
 
 ### Discussions
-- GitHub Discussions: https://github.com/disk0Dancer/NFC-bumber/discussions
+- GitHub Discussions: https://github.com/disk0Dancer/Wolle/discussions
 - Ask questions, share use cases, suggest features
 
 ### Security Issues
@@ -290,14 +290,14 @@ Users are responsible for compliance with local laws.
 
 ## 🔗 Links
 
-- **Repository**: https://github.com/disk0Dancer/NFC-bumber
-- **Releases**: https://github.com/disk0Dancer/NFC-bumber/releases
-- **Documentation**: https://github.com/disk0Dancer/NFC-bumber/tree/main/docs
+- **Repository**: https://github.com/disk0Dancer/Wolle
+- **Releases**: https://github.com/disk0Dancer/Wolle/releases
+- **Documentation**: https://github.com/disk0Dancer/Wolle/tree/main/docs
 - **Android NFC Guide**: https://developer.android.com/guide/topics/connectivity/nfc/hce
 
 ---
 
-**Thank you for using NFC Bumber!** 🎉
+**Thank you for using Wolle!** 🎉
 
 We hope you enjoy the new card emulation feature. Please provide feedback and report any issues you encounter.
 

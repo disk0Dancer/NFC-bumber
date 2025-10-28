@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Legacy widget layout - redirects to small for backward compatibility -->
+<!-- Small widget layout (1x1) - Compact icon-only view -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:padding="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,37 +12,33 @@
         android:orientation="vertical"
         android:background="@drawable/widget_background"
         android:gravity="center"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/widget_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="@string/app_name"
-            android:layout_marginBottom="8dp" />
+            android:contentDescription="@string/app_name" />
 
         <TextView
             android:id="@+id/widget_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="14sp"
+            android:text="NFC"
+            android:textSize="10sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:maxLines="2"
+            android:maxLines="1"
             android:ellipsize="end"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginTop="2dp" />
 
         <TextView
             android:id="@+id/widget_card_type"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="12sp"
-            android:textColor="#CCCCCC"
-            android:layout_marginTop="4dp"
-            android:gravity="center" />
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 

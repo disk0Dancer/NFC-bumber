@@ -14,41 +14,43 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             // Plugin versions
-            version("agp", "7.4.2")
-            version("kotlin", "1.9.0")
-            version("ksp", "1.9.0-1.0.13")
-            version("hilt", "2.48")
+            version("agp", "8.6.0")
+            version("kotlin", "2.0.0")
+            version("ksp", "2.0.0-1.0.24")
+            version("hilt", "2.51.1")
 
             // Library versions
-            version("compose-bom", "2023.10.01")
-            version("compose-compiler", "1.5.1")
-            version("core-ktx", "1.12.0")
-            version("lifecycle", "2.6.2")
-            version("activity-compose", "1.8.0")
-            version("navigation-compose", "2.7.5")
-            version("room", "2.6.0")
-            version("coroutines", "1.7.3")
-            version("hilt-navigation-compose", "1.1.0")
-            version("datastore", "1.0.0")
-            version("biometric", "1.1.0")
-            version("accompanist", "0.32.0")
+            version("compose-bom", "2024.10.00")
+            version("compose-compiler", "1.5.15")
+            version("core-ktx", "1.15.0")
+            version("lifecycle", "2.8.7")
+            version("activity-compose", "1.9.3")
+            version("navigation-compose", "2.8.4")
+            version("room", "2.6.1")
+            version("coroutines", "1.9.0")
+            version("hilt-navigation-compose", "1.2.0")
+            version("datastore", "1.1.1")
+            version("biometric", "1.2.0-alpha05")
+            version("accompanist", "0.36.0")
             version("security-crypto", "1.1.0-alpha06")
             
             // Test versions
-            version("junit", "5.10.1")
+            version("junit", "5.11.3")
             version("junit4", "4.13.2")
-            version("mockk", "1.13.8")
-            version("espresso", "3.5.1")
-            version("androidx-test", "1.5.0")
-            version("compose-test", "1.5.4")
+            version("mockk", "1.13.13")
+            version("espresso", "3.6.1")
+            version("androidx-test", "1.6.1")
+            version("compose-test", "1.7.5")
 
             // Plugins
             plugin("android-application", "com.android.application").versionRef("agp")
             plugin("android-library", "com.android.library").versionRef("agp")
             plugin("kotlin-android", "org.jetbrains.kotlin.android").versionRef("kotlin")
+            plugin("kotlin-compose", "org.jetbrains.kotlin.plugin.compose").versionRef("kotlin")
             plugin("kotlin-kapt", "org.jetbrains.kotlin.kapt").versionRef("kotlin")
             plugin("ksp", "com.google.devtools.ksp").versionRef("ksp")
             plugin("hilt", "com.google.dagger.hilt.android").versionRef("hilt")
+            plugin("room", "androidx.room.gradle.plugin").versionRef("room")
 
             // Core Android
             library("core-ktx", "androidx.core", "core-ktx").versionRef("core-ktx")
@@ -116,7 +118,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NFC-bumber"
+rootProject.name = "Wolle"
 include(":app")
 include(":data")
 include(":domain")

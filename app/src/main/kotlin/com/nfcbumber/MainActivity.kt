@@ -23,6 +23,7 @@ import com.nfcbumber.presentation.scan.ScanCardScreen
 import com.nfcbumber.presentation.scan.ScanCardViewModel
 import com.nfcbumber.presentation.settings.SettingsScreen
 import com.nfcbumber.presentation.settings.SettingsViewModel
+import com.nfcbumber.presentation.theme.WolleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -100,7 +101,7 @@ fun MainApp(
     val themeMode by settingsViewModel.themeMode.collectAsState()
     val dynamicColor by settingsViewModel.dynamicColor.collectAsState()
 
-    com.nfcbumber.presentation.theme.NfcBumberTheme(
+    WolleTheme(
         themeMode = themeMode,
         dynamicColor = dynamicColor
     ) {
@@ -141,8 +142,6 @@ fun MainNavigation(
                 onDeleteCard = viewModel::deleteCard,
                 onRefresh = viewModel::refresh,
                 onSearchQueryChange = viewModel::updateSearchQuery,
-                onExportCards = viewModel::exportCards,
-                onImportCards = viewModel::importCards,
                 onResetBackupState = viewModel::resetBackupState,
                 onNavigateToSettings = { navController.navigate("settings") }
             )

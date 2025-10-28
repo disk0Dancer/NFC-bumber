@@ -1,6 +1,6 @@
-# NFC Card Emulator (NFC-bumber)
+# Wolle - NFC Card Emulator
 
-[![Latest Release](https://img.shields.io/github/v/release/disk0Dancer/NFC-bumber?label=Latest%20Release&color=brightgreen)](https://github.com/disk0Dancer/NFC-bumber/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/disk0Dancer/Wolle?label=Latest%20Release&color=brightgreen)](https://github.com/disk0Dancer/Wolle/releases/latest)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-8.0%2B%20%7C%20API%2035-green.svg)](https://developer.android.com)
 
@@ -8,7 +8,7 @@
 
 ### Через Obtainium (Рекомендуется | Recommended) 🚀
 
-[<img src="assets/badge_obtainium.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/disk0Dancer/NFC-bumber)
+[![Get it on Obtainium](https://github.com/ImranR98/Obtainium/raw/main/assets/graphics/badge_obtainium.png)](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/disk0Dancer/Wolle)
 
 **Что такое Obtainium? | What is Obtainium?**
 
@@ -16,14 +16,14 @@ Obtainium - это приложение для автоматического о
 
 **Как установить | How to install:**
 1. Установите [Obtainium](https://github.com/ImranR98/Obtainium/releases/latest)
-2. Нажмите на значок выше или добавьте вручную: `https://github.com/disk0Dancer/NFC-bumber`
+2. Нажмите на значок выше или добавьте вручную: `https://github.com/disk0Dancer/Wolle`
 3. Obtainium автоматически установит приложение и будет следить за обновлениями
 
 ### Прямая установка APK | Direct APK Installation
 
-[**📥 Скачать последнюю версию | Download Latest Version**](https://github.com/disk0Dancer/NFC-bumber/releases/latest)
+[**📥 Скачать последнюю версию | Download Latest Version**](https://github.com/disk0Dancer/Wolle/releases/latest)
 
-1. Скачайте `.apk` файл из [Releases](https://github.com/disk0Dancer/NFC-bumber/releases)
+1. Скачайте `.apk` файл из [Releases](https://github.com/disk0Dancer/Wolle/releases)
 2. Включите "Установка из неизвестных источников" в настройках Android
 3. Установите APK файл
 
@@ -135,8 +135,8 @@ NFC Card Emulator is a modern Android application for emulating NFC cards. The a
 
 ```bash
 # Клонировать репозиторий | Clone repository
-git clone https://github.com/disk0Dancer/NFC-bumber.git
-cd NFC-bumber
+git clone https://github.com/disk0Dancer/Wolle.git
+cd Wolle
 
 # Установить git хуки (опционально) | Setup git hooks (optional)
 ./.githooks/setup.sh
@@ -295,16 +295,16 @@ Copyright (c) 2025, Grigorii Churakov
 
 ## 🔗 Ссылки | Links
 
-- [GitHub Repository](https://github.com/disk0Dancer/NFC-bumber)
-- [Issue Tracker](https://github.com/disk0Dancer/NFC-bumber/issues)
+- [GitHub Repository](https://github.com/disk0Dancer/Wolle)
+- [Issue Tracker](https://github.com/disk0Dancer/Wolle/issues)
 - [Documentation](./docs/)
 - [Android NFC Guide](https://developer.android.com/guide/topics/connectivity/nfc)
 - [Host Card Emulation](https://developer.android.com/guide/topics/connectivity/nfc/hce)
 
 ## 📧 Контакты | Contact
 
-- **Issues**: [GitHub Issues](https://github.com/disk0Dancer/NFC-bumber/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/disk0Dancer/NFC-bumber/discussions)
+- **Issues**: [GitHub Issues](https://github.com/disk0Dancer/Wolle/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/disk0Dancer/Wolle/discussions)
 
 ---
 

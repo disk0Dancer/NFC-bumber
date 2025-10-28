@@ -5,15 +5,67 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
     <group
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:translateX="27"
-        android:translateY="27">
+        android:scaleX="0.65"
+        android:scaleY="0.65"
+        android:translateX="18.9"
+        android:translateY="18.9">
+        <!-- Card background -->
         <path
             android:fillColor="#2196F3"
-            android:pathData="M54,18c-9.95,0 -18,8.05 -18,18s8.05,18 18,18 18,-8.05 18,-18 -8.05,-18 -18,-18zM54,48c-6.63,0 -12,-5.37 -12,-12s5.37,-12 12,-12 12,5.37 12,12 -5.37,12 -12,12z" />
+            android:pathData="M20,30 L88,30 A8,8 0 0,1 96,38 L96,70 A8,8 0 0,1 88,78 L20,78 A8,8 0 0,1 12,70 L12,38 A8,8 0 0,1 20,30 Z" />
+
+        <!-- NFC chip indicator -->
         <path
-            android:fillColor="#2196F3"
-            android:pathData="M54,6c-16.57,0 -30,13.43 -30,30s13.43,30 30,30 30,-13.43 30,-30 -13.43,-30 -30,-30zM54,60c-13.23,0 -24,-10.77 -24,-24s10.77,-24 24,-24 24,10.77 24,24 -10.77,24 -24,24z" />
+            android:fillColor="#FFC107"
+            android:pathData="M22,44 L38,44 A2,2 0 0,1 40,46 L40,56 A2,2 0 0,1 38,58 L22,58 A2,2 0 0,1 20,56 L20,46 A2,2 0 0,1 22,44 Z" />
+
+        <!-- NFC vertical line -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M52,42 L56,42 L56,66 L52,66 Z" />
+
+        <!-- NFC waves - right side -->
+        <path
+            android:fillColor="@android:color/transparent"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="3"
+            android:strokeLineCap="round"
+            android:pathData="M60,54 A8,8 0 0,0 60,54 Q62,54 64,52 Q66,50 66,48" />
+
+        <path
+            android:fillColor="@android:color/transparent"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="3"
+            android:strokeLineCap="round"
+            android:pathData="M60,54 Q65,54 70,49" />
+
+        <path
+            android:fillColor="@android:color/transparent"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="3"
+            android:strokeLineCap="round"
+            android:pathData="M60,54 Q68,54 76,46" />
+
+        <!-- NFC waves - left side -->
+        <path
+            android:fillColor="@android:color/transparent"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="3"
+            android:strokeLineCap="round"
+            android:pathData="M48,54 Q46,54 44,52 Q42,50 42,48" />
+
+        <path
+            android:fillColor="@android:color/transparent"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="3"
+            android:strokeLineCap="round"
+            android:pathData="M48,54 Q43,54 38,49" />
+
+        <path
+            android:fillColor="@android:color/transparent"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="3"
+            android:strokeLineCap="round"
+            android:pathData="M48,54 Q40,54 32,46" />
     </group>
 </vector>
