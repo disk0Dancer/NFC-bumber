@@ -9,6 +9,7 @@ import android.nfc.tech.NfcB
 import android.nfc.tech.NfcF
 import android.nfc.tech.NfcV
 import android.util.Log
+import com.nfcbumber.data.util.toHexString
 import com.nfcbumber.domain.model.CardType
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -222,10 +223,6 @@ class NfcReaderService @Inject constructor() {
                 Log.w(TAG, "Error closing NFC-V connection", e)
             }
         }
-    }
-
-    private fun ByteArray.toHexString(): String {
-        return joinToString("") { "%02X".format(it) }
     }
 }
 
