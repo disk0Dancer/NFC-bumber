@@ -50,6 +50,7 @@ android {
 dependencies {
     // Modules
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     // Core
     implementation(libs.core.ktx)
