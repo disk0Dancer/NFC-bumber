@@ -4,11 +4,32 @@
     android:requireDeviceUnlock="false"
     android:apduServiceBanner="@mipmap/ic_launcher">
     
-    <!-- Default AID for generic card emulation -->
+    <!-- AID group for access control, transit, and identification cards -->
     <aid-group android:description="@string/aid_group_description" android:category="other">
-        <!-- Generic application identifier for NFC card emulation -->
+        <!-- Generic/Default AIDs -->
         <aid-filter android:name="F0010203040506"/>
-        <!-- Alternative AID for compatibility -->
+        <aid-filter android:name="F04E4643424D42455200"/>
+        
+        <!-- Payment AIDs (for reference, most terminals won't accept them from "other" category) -->
         <aid-filter android:name="A0000000031010"/>
+        <aid-filter android:name="A0000000041010"/>
+        <aid-filter android:name="A0000000032010"/>
+        <aid-filter android:name="A0000000999999"/>
+        
+        <!-- MIFARE DESFire AIDs (common in access control) -->
+        <aid-filter android:name="D2760000850100"/>
+        <aid-filter android:name="D2760000850101"/>
+        
+        <!-- Transit card AIDs -->
+        <aid-filter android:name="315449432E494341"/>
+        
+        <!-- Access control AIDs -->
+        <aid-filter android:name="A000000618"/>
+        <aid-filter android:name="A00000061701"/>
+        
+        <!-- Common transport and access control AIDs -->
+        <aid-filter android:name="F0000000000000"/>
+        <aid-filter android:name="A00000015100"/>
+        <aid-filter android:name="D2760000850100"/>
     </aid-group>
 </host-apdu-service>

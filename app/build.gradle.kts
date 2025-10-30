@@ -7,6 +7,34 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+// Function to extract version from git tag
+fun getVersionFromGit(): Pair<Int, String> {
+    return try {
+        val gitTag = Runtime.getRuntime()
+            .exec("git describe --tags --abbrev=0")
+            .inputStream.bufferedReader().readText().trim()
+        
+        // Parse version tag (e.g., "v1.2.3" or "1.2.3")
+        val versionMatch = Regex("""v?(\d+)\.(\d+)\.(\d+)""").find(gitTag)
+        if (versionMatch != null) {
+            val (major, minor, patch) = versionMatch.destructured
+            // Calculate versionCode as major*10000 + minor*100 + patch
+            val versionCode = major.toInt() * 10000 + minor.toInt() * 100 + patch.toInt()
+            val versionName = "$major.$minor.$patch"
+            Pair(versionCode, versionName)
+        } else {
+            // Fallback if no valid tag found
+            Pair(1, "0.1.0")
+        }
+    } catch (e: Exception) {
+        // Fallback to default version if git command fails
+        println("Warning: Could not read git tag, using default version. Error: ${e.message}")
+        Pair(1, "0.1.0")
+    }
+}
+
+val (appVersionCode, appVersionName) = getVersionFromGit()
+
 android {
     namespace = "com.nfcbumber"
     compileSdk = 35
@@ -15,8 +43,8 @@ android {
         applicationId = "com.nfcbumber"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "2.0.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

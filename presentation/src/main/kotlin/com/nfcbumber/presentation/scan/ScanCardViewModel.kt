@@ -67,6 +67,7 @@ class ScanCardViewModel @Inject constructor(
                 uid = cardData.uid,
                 ats = cardData.ats,
                 historicalBytes = cardData.historicalBytes,
+                aids = cardData.aids,
                 cardType = cardData.cardType,
                 color = color,
                 createdAt = LocalDateTime.now(),

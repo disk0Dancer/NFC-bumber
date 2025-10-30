@@ -11,6 +11,7 @@ data class Card(
     val uid: ByteArray,
     val ats: ByteArray?,
     val historicalBytes: ByteArray?,
+    val aids: List<String> = emptyList(), // Application Identifiers discovered from the card
     val cardType: CardType,
     val color: Int,
     val createdAt: LocalDateTime,
@@ -34,6 +35,7 @@ data class Card(
             if (other.historicalBytes == null) return false
             if (!historicalBytes.contentEquals(other.historicalBytes)) return false
         } else if (other.historicalBytes != null) return false
+        if (aids != other.aids) return false
         if (cardType != other.cardType) return false
 
         return true
@@ -45,6 +47,7 @@ data class Card(
         result = 31 * result + uid.contentHashCode()
         result = 31 * result + (ats?.contentHashCode() ?: 0)
         result = 31 * result + (historicalBytes?.contentHashCode() ?: 0)
+        result = 31 * result + aids.hashCode()
         result = 31 * result + cardType.hashCode()
         return result
     }

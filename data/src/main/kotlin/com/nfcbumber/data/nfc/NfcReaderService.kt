@@ -43,25 +43,29 @@ class NfcReaderService @Inject constructor() {
             Log.d(TAG, "Available technologies: ${techList.joinToString()}")
             
             // Try to read as ISO-DEP first (most common for smart cards)
-            val (ats, historicalBytes, cardType) = when {
+            val (cardData, aids) = when {
                 techList.contains(IsoDep::class.java.name) -> readIsoDep(tag)
-                techList.contains(MifareClassic::class.java.name) -> readMifareClassic(tag)
-                techList.contains(MifareUltralight::class.java.name) -> readMifareUltralight(tag)
-                techList.contains(NfcA::class.java.name) -> readNfcA(tag)
-                techList.contains(NfcB::class.java.name) -> readNfcB(tag)
-                techList.contains(NfcF::class.java.name) -> readNfcF(tag)
-                techList.contains(NfcV::class.java.name) -> readNfcV(tag)
-                else -> Triple(null, null, CardType.UNKNOWN)
+                techList.contains(MifareClassic::class.java.name) -> Pair(readMifareClassic(tag), emptyList())
+                techList.contains(MifareUltralight::class.java.name) -> Pair(readMifareUltralight(tag), emptyList())
+                techList.contains(NfcA::class.java.name) -> Pair(readNfcA(tag), emptyList())
+                techList.contains(NfcB::class.java.name) -> Pair(readNfcB(tag), emptyList())
+                techList.contains(NfcF::class.java.name) -> Pair(readNfcF(tag), emptyList())
+                techList.contains(NfcV::class.java.name) -> Pair(readNfcV(tag), emptyList())
+                else -> Pair(Triple(null, null, CardType.UNKNOWN), emptyList())
             }
+            
+            val (ats, historicalBytes, cardType) = cardData
             
             Log.d(TAG, "Card type: $cardType")
             Log.d(TAG, "ATS: ${ats?.toHexString() ?: "N/A"}")
             Log.d(TAG, "Historical bytes: ${historicalBytes?.toHexString() ?: "N/A"}")
+            Log.d(TAG, "Discovered AIDs: ${aids.joinToString()}")
             
             NfcCardData(
                 uid = uid,
                 ats = ats,
                 historicalBytes = historicalBytes,
+                aids = aids,
                 cardType = cardType
             )
         } catch (e: Exception) {
@@ -70,7 +74,7 @@ class NfcReaderService @Inject constructor() {
         }
     }
 
-    private fun readIsoDep(tag: Tag): Triple<ByteArray?, ByteArray?, CardType> {
+    private fun readIsoDep(tag: Tag): Pair<Triple<ByteArray?, ByteArray?, CardType>, List<String>> {
         val isoDep = IsoDep.get(tag)
         return try {
             isoDep.connect()
@@ -79,7 +83,10 @@ class NfcReaderService @Inject constructor() {
             val ats = isoDep.historicalBytes ?: isoDep.hiLayerResponse
             val historicalBytes = isoDep.historicalBytes
             
-            Triple(ats, historicalBytes, CardType.ISO_DEP)
+            // Try to discover AIDs by sending SELECT commands for common AIDs
+            val aids = discoverAids(isoDep)
+            
+            Pair(Triple(ats, historicalBytes, CardType.ISO_DEP), aids)
         } finally {
             try {
                 if (isoDep.isConnected) {
@@ -89,6 +96,63 @@ class NfcReaderService @Inject constructor() {
                 Log.w(TAG, "Error closing ISO-DEP connection", e)
             }
         }
+    }
+    
+    /**
+     * Discover AIDs supported by the card by probing common AIDs.
+     * This helps identify what applications the card supports.
+     */
+    private fun discoverAids(isoDep: IsoDep): List<String> {
+        val discoveredAids = mutableListOf<String>()
+        
+        // Common AIDs for access control, transit, and payment systems
+        val commonAids = listOf(
+            "F0010203040506",      // Generic/Default AID
+            "A0000000031010",      // Visa
+            "A0000000041010",      // Mastercard
+            "A0000000032010",      // Visa Electron
+            "A0000000999999",      // Generic payment
+            "D2760000850100",      // MIFARE DESFire
+            "D2760000850101",      // MIFARE DESFire EV1
+            "315449432E494341",    // Transit card (STIC.ICA)
+            "A000000618",          // Access control
+            "A00000061701",        // Access control (HID)
+            "F04E4643424D42455200" // NFCBUMBER (our app AID)
+        )
+        
+        for (aid in commonAids) {
+            try {
+                val selectCommand = buildSelectApdu(aid)
+                val response = isoDep.transceive(selectCommand)
+                
+                // Check if response indicates success (SW1 SW2 = 90 00)
+                if (response.size >= 2 && 
+                    response[response.size - 2] == 0x90.toByte() && 
+                    response[response.size - 1] == 0x00.toByte()) {
+                    Log.d(TAG, "Discovered AID: $aid")
+                    discoveredAids.add(aid)
+                }
+            } catch (e: Exception) {
+                // Card doesn't support this AID, continue
+                Log.v(TAG, "AID $aid not supported: ${e.message}")
+            }
+        }
+        
+        return discoveredAids
+    }
+    
+    /**
+     * Build a SELECT APDU command for a given AID.
+     */
+    private fun buildSelectApdu(aid: String): ByteArray {
+        val aidBytes = aid.chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+        return byteArrayOf(
+            0x00.toByte(), // CLA
+            0xA4.toByte(), // INS (SELECT)
+            0x04.toByte(), // P1 (Select by name)
+            0x00.toByte(), // P2
+            aidBytes.size.toByte() // Lc (length of AID)
+        ) + aidBytes
     }
 
     private fun readMifareClassic(tag: Tag): Triple<ByteArray?, ByteArray?, CardType> {
@@ -233,6 +297,7 @@ data class NfcCardData(
     val uid: ByteArray,
     val ats: ByteArray?,
     val historicalBytes: ByteArray?,
+    val aids: List<String> = emptyList(),
     val cardType: CardType
 ) {
     override fun equals(other: Any?): Boolean {
@@ -250,6 +315,7 @@ data class NfcCardData(
             if (other.historicalBytes == null) return false
             if (!historicalBytes.contentEquals(other.historicalBytes)) return false
         } else if (other.historicalBytes != null) return false
+        if (aids != other.aids) return false
         if (cardType != other.cardType) return false
 
         return true
@@ -259,6 +325,7 @@ data class NfcCardData(
         var result = uid.contentHashCode()
         result = 31 * result + (ats?.contentHashCode() ?: 0)
         result = 31 * result + (historicalBytes?.contentHashCode() ?: 0)
+        result = 31 * result + aids.hashCode()
         result = 31 * result + cardType.hashCode()
         return result
     }
