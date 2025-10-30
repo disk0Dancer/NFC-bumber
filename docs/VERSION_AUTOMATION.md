@@ -64,7 +64,7 @@ android {
 The version code is calculated using a formula that ensures:
 - Monotonically increasing values (required by Android)
 - Clear relationship to semantic version
-- Support for up to version 99.99.99
+- Support for up to version 209.99.99 (Android's max version code is 2,100,000,000)
 
 **Formula:**
 ```
@@ -79,6 +79,7 @@ versionCode = (major × 10000) + (minor × 100) + patch
 | v1.0.0      | 10000       | 1.0.0       |
 | v2.3.5      | 20305       | 2.3.5       |
 | v10.15.99   | 101599      | 10.15.99    |
+| v209.99.99  | 2099999     | 209.99.99   |
 
 ## Benefits
 
