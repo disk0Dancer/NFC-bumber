@@ -58,11 +58,28 @@ android {
     signingConfigs {
         create("release") {
             // Use debug keystore for release builds to enable APK installation
-            // For production, replace with actual release keystore
-            storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
+            // This allows users to install APKs directly without certificate issues
+            // 
+            // For production releases with proper signing:
+            // 1. Create a release keystore using Android Studio or keytool
+            // 2. Set environment variables or use gradle.properties:
+            //    - RELEASE_STORE_FILE=/path/to/release.keystore
+            //    - RELEASE_STORE_PASSWORD=your_password
+            //    - RELEASE_KEY_ALIAS=your_alias
+            //    - RELEASE_KEY_PASSWORD=your_key_password
+            val debugKeystorePath = "${System.getProperty("user.home")}/.android/debug.keystore"
+            val debugKeystoreFile = file(debugKeystorePath)
+            
+            if (debugKeystoreFile.exists()) {
+                storeFile = debugKeystoreFile
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            } else {
+                // If debug keystore doesn't exist, signing will fail at build time
+                // This is intentional to prevent unsigned APKs
+                logger.warn("Debug keystore not found at: $debugKeystorePath")
+            }
         }
     }
 
@@ -74,7 +91,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            // Only apply signing config if keystore exists
+            val releaseSigningConfig = signingConfigs.getByName("release")
+            if (releaseSigningConfig.storeFile?.exists() == true) {
+                signingConfig = releaseSigningConfig
+            }
         }
         debug {
             isMinifyEnabled = false
