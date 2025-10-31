@@ -57,12 +57,6 @@ class NfcEmulatorService : HostApduService() {
     }
 
     override fun processCommandApdu(commandApdu: ByteArray?, extras: Bundle?): ByteArray {
-        // Check if emulation is active
-        if (!emulationManager.isEmulationActive()) {
-            Log.d(TAG, "NFC emulation is not active, ignoring APDU command")
-            return SW_FILE_NOT_FOUND
-        }
-
         if (commandApdu == null) {
             Log.w(TAG, "Received null APDU command")
             return SW_UNKNOWN
@@ -70,6 +64,13 @@ class NfcEmulatorService : HostApduService() {
 
         val commandHex = commandApdu.toHexString()
         Log.d(TAG, "Received APDU: $commandHex")
+        
+        // Check if a card is selected for emulation
+        val selectedCardId = emulationManager.getSelectedCardId()
+        if (selectedCardId == NO_CARD_SELECTED) {
+            Log.d(TAG, "No card selected for emulation")
+            return SW_FILE_NOT_FOUND
+        }
 
         return try {
             when {
