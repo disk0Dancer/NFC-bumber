@@ -50,6 +50,20 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        
+        // Expose version name in BuildConfig for dynamic version display
+        buildConfigField("String", "VERSION_NAME", "\"${appVersionName}\"")
+    }
+
+    signingConfigs {
+        create("release") {
+            // Use debug keystore for release builds to enable APK installation
+            // For production, replace with actual release keystore
+            storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
@@ -60,6 +74,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             isMinifyEnabled = false
