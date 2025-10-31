@@ -14,6 +14,7 @@ data class CardEntity(
     val uid: ByteArray,
     val ats: ByteArray?,
     val historicalBytes: ByteArray?,
+    val aids: String = "", // Comma-separated Application Identifiers
     val cardType: String,
     val color: Int,
     val createdAt: Long,

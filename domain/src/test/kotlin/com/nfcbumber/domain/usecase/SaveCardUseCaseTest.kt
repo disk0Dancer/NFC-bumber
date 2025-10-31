@@ -22,6 +22,7 @@ class SaveCardUseCaseTest {
         uid = byteArrayOf(0x01, 0x02, 0x03, 0x04),
         ats = null,
         historicalBytes = null,
+        aids = emptyList(),
         cardType = CardType.ISO_DEP,
         color = 0xFF0000,
         createdAt = LocalDateTime.now(),

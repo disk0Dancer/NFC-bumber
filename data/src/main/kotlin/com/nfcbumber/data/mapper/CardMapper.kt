@@ -18,6 +18,7 @@ object CardMapper {
             uid = entity.uid,
             ats = entity.ats,
             historicalBytes = entity.historicalBytes,
+            aids = if (entity.aids.isNotEmpty()) entity.aids.split(",") else emptyList(),
             cardType = CardType.valueOf(entity.cardType),
             color = entity.color,
             createdAt = LocalDateTime.ofInstant(
@@ -41,6 +42,7 @@ object CardMapper {
             uid = card.uid,
             ats = card.ats,
             historicalBytes = card.historicalBytes,
+            aids = card.aids.joinToString(","),
             cardType = card.cardType.name,
             color = card.color,
             createdAt = card.createdAt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),

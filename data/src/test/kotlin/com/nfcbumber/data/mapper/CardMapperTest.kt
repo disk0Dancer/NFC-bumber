@@ -19,6 +19,7 @@ class CardMapperTest {
             uid = byteArrayOf(0x01, 0x02, 0x03, 0x04),
             ats = byteArrayOf(0x78, 0x77, 0x71, 0x02),
             historicalBytes = null,
+            aids = "F0010203040506,A0000000031010",
             cardType = CardType.ISO_DEP.name,
             color = 0xFF0000,
             createdAt = System.currentTimeMillis(),
@@ -34,6 +35,7 @@ class CardMapperTest {
         assertEquals(entity.name, card.name)
         assertArrayEquals(entity.uid, card.uid)
         assertArrayEquals(entity.ats, card.ats)
+        assertEquals(listOf("F0010203040506", "A0000000031010"), card.aids)
         assertEquals(CardType.ISO_DEP, card.cardType)
         assertEquals(entity.color, card.color)
         assertEquals(entity.usageCount, card.usageCount)
@@ -48,6 +50,7 @@ class CardMapperTest {
             uid = byteArrayOf(0x01, 0x02, 0x03, 0x04),
             ats = byteArrayOf(0x78, 0x77, 0x71, 0x02),
             historicalBytes = null,
+            aids = listOf("F0010203040506", "A0000000031010"),
             cardType = CardType.ISO_DEP,
             color = 0xFF0000,
             createdAt = LocalDateTime.now(),
@@ -63,6 +66,7 @@ class CardMapperTest {
         assertEquals(card.name, entity.name)
         assertArrayEquals(card.uid, entity.uid)
         assertArrayEquals(card.ats, entity.ats)
+        assertEquals("F0010203040506,A0000000031010", entity.aids)
         assertEquals(card.cardType.name, entity.cardType)
         assertEquals(card.color, entity.color)
         assertEquals(card.usageCount, entity.usageCount)
@@ -77,6 +81,7 @@ class CardMapperTest {
             uid = byteArrayOf(0x01, 0x02, 0x03, 0x04),
             ats = byteArrayOf(0x78, 0x77, 0x71, 0x02),
             historicalBytes = byteArrayOf(0x12, 0x34),
+            aids = listOf("F0010203040506", "D2760000850100"),
             cardType = CardType.MIFARE_CLASSIC,
             color = 0x00FF00,
             createdAt = LocalDateTime.now(),
@@ -94,6 +99,7 @@ class CardMapperTest {
         assertArrayEquals(originalCard.uid, convertedCard.uid)
         assertArrayEquals(originalCard.ats, convertedCard.ats)
         assertArrayEquals(originalCard.historicalBytes, convertedCard.historicalBytes)
+        assertEquals(originalCard.aids, convertedCard.aids)
         assertEquals(originalCard.cardType, convertedCard.cardType)
         assertEquals(originalCard.color, convertedCard.color)
         assertEquals(originalCard.usageCount, convertedCard.usageCount)

@@ -114,6 +114,7 @@ class NfcEmulatorService : HostApduService() {
 
     /**
      * Handle SELECT command (00 A4 04 00).
+     * Verifies that the requested AID matches one of the card's AIDs.
      * Returns ATS (Answer To Select) if available.
      */
     private fun handleSelectCommand(commandApdu: ByteArray): ByteArray {
@@ -121,20 +122,38 @@ class NfcEmulatorService : HostApduService() {
         
         val card = getSelectedCard()
         
-        return if (card != null) {
-            Log.d(TAG, "Card selected: ${card.name}, UID: ${card.uid.toHexString()}")
-            
-            // Return ATS if available, otherwise just success
-            if (card.ats != null && card.ats.isNotEmpty()) {
-                Log.d(TAG, "Returning ATS: ${card.ats.toHexString()}")
-                card.ats + SW_SUCCESS
-            } else {
-                Log.d(TAG, "No ATS available, returning success")
-                SW_SUCCESS
-            }
-        } else {
+        if (card == null) {
             Log.w(TAG, "No card selected for emulation")
-            SW_FILE_NOT_FOUND
+            return SW_FILE_NOT_FOUND
+        }
+        
+        // Extract the requested AID from the SELECT command
+        // Format: 00 A4 04 00 Lc [AID bytes]
+        if (commandApdu.size >= 6) {
+            val aidLength = commandApdu[4].toInt() and 0xFF
+            if (commandApdu.size >= 5 + aidLength) {
+                val requestedAid = commandApdu.copyOfRange(5, 5 + aidLength).toHexString()
+                Log.d(TAG, "Terminal requested AID: $requestedAid")
+                
+                // Check if the card supports this AID
+                if (card.aids.isNotEmpty() && !card.aids.contains(requestedAid)) {
+                    Log.w(TAG, "Card does not support requested AID: $requestedAid")
+                    Log.d(TAG, "Card supports AIDs: ${card.aids.joinToString()}")
+                    // Return file not found for unsupported AID
+                    return SW_FILE_NOT_FOUND
+                }
+                
+                Log.d(TAG, "AID matched, card selected: ${card.name}")
+            }
+        }
+        
+        // Return ATS if available, otherwise just success
+        return if (card.ats != null && card.ats.isNotEmpty()) {
+            Log.d(TAG, "Returning ATS: ${card.ats.toHexString()}")
+            card.ats + SW_SUCCESS
+        } else {
+            Log.d(TAG, "No ATS available, returning success")
+            SW_SUCCESS
         }
     }
 
@@ -200,10 +219,17 @@ class NfcEmulatorService : HostApduService() {
             runBlocking {
                 val cardEntity = cardDao.getCardById(selectedCardId)
                 if (cardEntity != null) {
+                    val aids = if (cardEntity.aids.isNotEmpty()) {
+                        cardEntity.aids.split(",")
+                    } else {
+                        emptyList()
+                    }
+                    
                     EmulatedCardData(
                         uid = cardEntity.uid,
                         ats = cardEntity.ats,
                         historicalBytes = cardEntity.historicalBytes,
+                        aids = aids,
                         name = cardEntity.name
                     )
                 } else {
@@ -246,6 +272,7 @@ private data class EmulatedCardData(
     val uid: ByteArray,
     val ats: ByteArray?,
     val historicalBytes: ByteArray?,
+    val aids: List<String>,
     val name: String
 ) {
     override fun equals(other: Any?): Boolean {
