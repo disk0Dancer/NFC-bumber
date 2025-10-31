@@ -57,8 +57,15 @@ android {
 
     signingConfigs {
         create("release") {
-            // Use debug keystore for release builds to enable APK installation
-            // This allows users to install APKs directly without certificate issues
+            // ⚠️ SECURITY WARNING: Using debug keystore for development/testing only
+            // The debug keystore uses publicly known credentials and should NOT be used
+            // for production releases or apps distributed to untrusted users.
+            //
+            // This configuration enables APK installation without certificate errors,
+            // which is useful for:
+            // - Development builds shared with testers
+            // - Personal use builds
+            // - Open source projects without sensitive data
             // 
             // For production releases with proper signing:
             // 1. Create a release keystore using Android Studio or keytool
