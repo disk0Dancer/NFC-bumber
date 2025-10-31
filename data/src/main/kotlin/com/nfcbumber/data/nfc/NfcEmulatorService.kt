@@ -90,9 +90,31 @@ class NfcEmulatorService : HostApduService() {
                 commandApdu[1] == 0xCA.toByte() -> {
                     handleGetDataCommand(commandApdu)
                 }
+                // UPDATE BINARY command (00 D6) - some systems use this
+                commandApdu.size >= 2 && 
+                commandApdu[0] == 0x00.toByte() && 
+                commandApdu[1] == 0xD6.toByte() -> {
+                    Log.d(TAG, "UPDATE BINARY command - returning success")
+                    SW_SUCCESS
+                }
+                // VERIFY command (00 20) - some systems use this
+                commandApdu.size >= 2 && 
+                commandApdu[0] == 0x00.toByte() && 
+                commandApdu[1] == 0x20.toByte() -> {
+                    Log.d(TAG, "VERIFY command - returning success")
+                    SW_SUCCESS
+                }
+                // For any other command, try to respond with success if we have a valid card
                 else -> {
-                    Log.w(TAG, "Unknown APDU command: $commandHex")
-                    SW_COMMAND_NOT_ALLOWED
+                    Log.w(TAG, "Unknown APDU command: $commandHex - attempting generic response")
+                    val card = getSelectedCard()
+                    if (card != null) {
+                        // Return UID for unknown commands as a fallback
+                        Log.d(TAG, "Returning UID for unknown command")
+                        card.uid + SW_SUCCESS
+                    } else {
+                        SW_COMMAND_NOT_ALLOWED
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -117,6 +139,7 @@ class NfcEmulatorService : HostApduService() {
      * Handle SELECT command (00 A4 04 00).
      * Verifies that the requested AID matches one of the card's AIDs.
      * Returns ATS (Answer To Select) if available.
+     * For access control systems, we're more permissive with AID matching.
      */
     private fun handleSelectCommand(commandApdu: ByteArray): ByteArray {
         Log.d(TAG, "Processing SELECT command")
@@ -136,16 +159,19 @@ class NfcEmulatorService : HostApduService() {
                 val requestedAid = commandApdu.copyOfRange(5, 5 + aidLength).toHexString()
                 Log.d(TAG, "Terminal requested AID: $requestedAid")
                 
-                // Check if the card supports this AID
+                // For access control and intercom systems, be more permissive
+                // Only reject if we have specific AIDs and none match
                 if (card.aids.isNotEmpty() && !card.aids.contains(requestedAid)) {
-                    Log.w(TAG, "Card does not support requested AID: $requestedAid")
-                    Log.d(TAG, "Card supports AIDs: ${card.aids.joinToString()}")
-                    // Return file not found for unsupported AID
-                    return SW_FILE_NOT_FOUND
+                    Log.w(TAG, "Card AID mismatch: requested=$requestedAid, available=${card.aids.joinToString()}")
+                    // For access control, still try to succeed - many systems are flexible
+                    Log.d(TAG, "Accepting AID anyway for compatibility with access control systems")
                 }
                 
-                Log.d(TAG, "AID matched, card selected: ${card.name}")
+                Log.d(TAG, "Card selected: ${card.name}")
             }
+        } else {
+            // Some access control readers might send shorter SELECT commands
+            Log.d(TAG, "Short SELECT command received, accepting for compatibility")
         }
         
         // Return ATS if available, otherwise just success
