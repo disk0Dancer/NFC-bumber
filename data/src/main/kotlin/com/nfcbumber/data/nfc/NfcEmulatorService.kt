@@ -90,28 +90,21 @@ class NfcEmulatorService : HostApduService() {
                 commandApdu[1] == 0xCA.toByte() -> {
                     handleGetDataCommand(commandApdu)
                 }
-                // UPDATE BINARY command (00 D6) - some systems use this
-                commandApdu.size >= 2 && 
-                commandApdu[0] == 0x00.toByte() && 
-                commandApdu[1] == 0xD6.toByte() -> {
-                    Log.d(TAG, "UPDATE BINARY command - returning success")
+                // UPDATE BINARY (00 D6) and VERIFY (00 20) - some systems use these
+                commandApdu.size >= 2 && commandApdu[0] == 0x00.toByte() && 
+                (commandApdu[1] == 0xD6.toByte() || commandApdu[1] == 0x20.toByte()) -> {
+                    val cmdName = if (commandApdu[1] == 0xD6.toByte()) "UPDATE BINARY" else "VERIFY"
+                    Log.d(TAG, "$cmdName command - returning success")
                     SW_SUCCESS
                 }
-                // VERIFY command (00 20) - some systems use this
-                commandApdu.size >= 2 && 
-                commandApdu[0] == 0x00.toByte() && 
-                commandApdu[1] == 0x20.toByte() -> {
-                    Log.d(TAG, "VERIFY command - returning success")
-                    SW_SUCCESS
-                }
-                // For any other command, try to respond with success if we have a valid card
+                // For any other command, return success if we have a valid card
                 else -> {
-                    Log.w(TAG, "Unknown APDU command: $commandHex - attempting generic response")
+                    Log.w(TAG, "Unknown APDU command: $commandHex")
                     val card = getSelectedCard()
                     if (card != null) {
-                        // Return UID for unknown commands as a fallback
-                        Log.d(TAG, "Returning UID for unknown command")
-                        card.uid + SW_SUCCESS
+                        // Return generic success for unknown commands for compatibility
+                        Log.d(TAG, "Returning success for unknown command")
+                        SW_SUCCESS
                     } else {
                         SW_COMMAND_NOT_ALLOWED
                     }
